@@ -12,6 +12,8 @@
     height: 100%;
     background: #000;
     overflow: hidden;
+    font-family: "Times New Roman", serif;
+    color: #f2f2f2;
   }
 
   .stage {
@@ -20,27 +22,50 @@
     height: 100%;
   }
 
+  /* TEXT */
+  .text {
+    position: absolute;
+    top: 18%;
+    width: 100%;
+    text-align: center;
+    z-index: 5;
+    letter-spacing: 4px;
+  }
+
+  .text h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 6vw, 3.2rem);
+    font-weight: 500;
+  }
+
+  .text p {
+    margin-top: 18px;
+    font-size: clamp(0.9rem, 3vw, 1.05rem);
+    opacity: 0.85;
+    letter-spacing: 3px;
+  }
+
   /* MAIN FLAME */
   .flame {
     position: absolute;
-    bottom: 5%;
+    bottom: 6%;
     left: 50%;
     width: 120px;
     height: 360px;
     transform: translateX(-50%);
     background:
       radial-gradient(ellipse at 50% 90%,
-        #ffea9a 0%,
-        #ffb347 25%,
+        #ffefad 0%,
+        #ffb347 30%,
         #ff6a00 55%,
         #b30000 75%,
         transparent 85%);
     border-radius: 50% 50% 40% 40%;
-    filter: blur(1.5px);
-    animation: flame-flicker 0.22s infinite alternate ease-in-out;
+    filter: blur(1.6px);
+    animation: flame 0.22s infinite alternate ease-in-out;
   }
 
-  /* INNER HOT CORE */
+  /* HOT CORE */
   .flame::before {
     content: "";
     position: absolute;
@@ -51,41 +76,41 @@
     transform: translateX(-50%);
     background:
       radial-gradient(ellipse at center,
-        #fff8cc 0%,
-        #ffd56a 40%,
+        #fff9d6 0%,
+        #ffd76a 45%,
         #ff8c00 70%,
         transparent 85%);
     border-radius: 50%;
     filter: blur(1px);
-    animation: core-flicker 0.18s infinite alternate ease-in-out;
+    animation: core 0.18s infinite alternate ease-in-out;
   }
 
-  /* OUTER GLOW */
+  /* OUTER BLOOM */
   .flame::after {
     content: "";
     position: absolute;
     bottom: -40px;
     left: 50%;
-    width: 220px;
-    height: 480px;
+    width: 240px;
+    height: 520px;
     transform: translateX(-50%);
     background:
       radial-gradient(ellipse at center,
         rgba(255,140,0,0.35) 0%,
         rgba(255,60,0,0.25) 40%,
         rgba(0,0,0,0) 75%);
-    filter: blur(30px);
+    filter: blur(34px);
     z-index: -1;
   }
 
   /* ANIMATION */
-  @keyframes flame-flicker {
+  @keyframes flame {
     0% {
       transform: translateX(-50%) skewX(2deg) scaleY(1);
       opacity: 0.95;
     }
     50% {
-      transform: translateX(-48%) skewX(-3deg) scaleY(1.04);
+      transform: translateX(-48%) skewX(-3deg) scaleY(1.05);
       opacity: 1;
     }
     100% {
@@ -94,7 +119,7 @@
     }
   }
 
-  @keyframes core-flicker {
+  @keyframes core {
     0% {
       transform: translateX(-50%) scaleY(1);
       opacity: 0.9;
@@ -105,7 +130,7 @@
     }
   }
 
-  /* MOBILE SCALING */
+  /* MOBILE */
   @media (max-width: 768px) {
     .flame {
       width: 80px;
@@ -117,7 +142,7 @@
     }
     .flame::after {
       width: 160px;
-      height: 360px;
+      height: 380px;
     }
   }
 </style>
@@ -125,6 +150,11 @@
 
 <body>
   <div class="stage">
+    <div class="text">
+      <h1>COMMON SCENTS</h1>
+      <p>Coming Soon · 2026</p>
+    </div>
+
     <div class="flame"></div>
   </div>
 </body>
