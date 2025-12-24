@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Common Scents</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
 html, body {
@@ -46,30 +46,157 @@ html, body {
   letter-spacing: 3px;
 }
 
-/* FIRE */
-#fire {
+/* CANDLE CONTAINER */
+.candle-wrap {
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 260px;
-  z-index: 2;
+  bottom: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 340px;
+  z-index: 3;
 }
 
-/* SUBTLE WARM LIFT */
-.heat-wash {
+/* FROSTED GLASS JAR */
+.jar {
   position: absolute;
-  left: 0;
   bottom: 0;
   width: 100%;
-  height: 420px;
-  z-index: 3;
-  pointer-events: none;
+  height: 100%;
+  border-radius: 22px 22px 26px 26px;
   background:
-    radial-gradient(ellipse at center bottom,
-      rgba(255,150,60,0.08) 0%,
-      rgba(255,110,30,0.05) 30%,
-      rgba(0,0,0,0) 55%);
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.45),
+      rgba(255,255,255,0.30) 20%,
+      rgba(240,240,240,0.22) 55%,
+      rgba(220,220,220,0.28)
+    );
+  box-shadow:
+    inset 0 0 22px rgba(255,255,255,0.35),
+    inset 0 -25px 40px rgba(0,0,0,0.25),
+    0 18px 40px rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+}
+
+/* GLASS RIM */
+.jar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  width: 84%;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  filter: blur(1px);
+}
+
+/* WAX */
+.wax {
+  position: absolute;
+  bottom: 8%;
+  left: 8%;
+  width: 84%;
+  height: 60%;
+  background:
+    linear-gradient(
+      to bottom,
+      #f6f6f4,
+      #ededeb
+    );
+  border-radius: 18px;
+  box-shadow:
+    inset 0 4px 10px rgba(255,255,255,0.6),
+    inset 0 -10px 18px rgba(0,0,0,0.12);
+}
+
+/* FLAME */
+.flame {
+  position: absolute;
+  bottom: 68%;
+  left: 50%;
+  width: 26px;
+  height: 80px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(
+      ellipse at center bottom,
+      #fff7d6 0%,
+      #ffd67a 35%,
+      #ff9c2a 65%,
+      rgba(255,120,10,0.0) 80%
+    );
+  border-radius: 50% 50% 45% 45%;
+  filter: blur(0.4px);
+  animation: flameFlicker 1.6s infinite ease-in-out;
+}
+
+/* INNER CORE */
+.flame::before {
+  content: "";
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  width: 10px;
+  height: 40px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(
+      ellipse at center,
+      #fffdf2 0%,
+      #ffe9a8 60%,
+      rgba(255,200,100,0.0) 80%
+    );
+  border-radius: 50%;
+  filter: blur(0.3px);
+}
+
+/* FLAME GLOW */
+.flame::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  width: 90px;
+  height: 140px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(255,150,40,0.18) 0%,
+      rgba(255,100,20,0.10) 35%,
+      rgba(0,0,0,0) 70%
+    );
+  filter: blur(18px);
+  z-index: -1;
+}
+
+/* ANIMATION */
+@keyframes flameFlicker {
+  0% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateX(-50%) scaleY(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scaleY(0.98);
+    opacity: 0.92;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .candle-wrap {
+    width: 180px;
+    height: 260px;
+  }
+  .flame {
+    height: 64px;
+  }
 }
 </style>
 </head>
@@ -81,89 +208,12 @@ html, body {
     <p>Coming Soon · 2026</p>
   </div>
 
-  <canvas id="fire"></canvas>
-  <div class="heat-wash"></div>
+  <div class="candle-wrap">
+    <div class="flame"></div>
+    <div class="jar">
+      <div class="wax"></div>
+    </div>
+  </div>
 </div>
-
-<script>
-(() => {
-  const canvas = document.getElementById("fire");
-  const ctx = canvas.getContext("2d");
-  let DPR = window.devicePixelRatio || 1;
-
-  function resize() {
-    canvas.width = canvas.clientWidth * DPR;
-    canvas.height = canvas.clientHeight * DPR;
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
-  window.addEventListener("resize", resize);
-  resize();
-
-  const flames = [];
-  const COUNT = 80;
-
-  for (let i = 0; i < COUNT; i++) {
-    flames.push({
-      x: Math.random() * canvas.clientWidth,
-      h: 40 + Math.random() * 35,
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-
-  function draw() {
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    ctx.clearRect(0, 0, w, h);
-
-    /* EMBER BED (CRISP LINE) */
-    const emberGrad = ctx.createLinearGradient(0, h - 20, 0, h);
-    emberGrad.addColorStop(0, "rgba(255,120,20,0.25)");
-    emberGrad.addColorStop(1, "rgba(255,170,60,0.45)");
-    ctx.fillStyle = emberGrad;
-    ctx.fillRect(0, h - 20, w, 20);
-
-    /* FLAMES */
-    ctx.globalCompositeOperation = "lighter";
-
-    flames.forEach(f => {
-      f.phase += 0.03;
-      const flicker = Math.sin(f.phase) * 6;
-      const height = f.h + flicker;
-
-      const grad = ctx.createLinearGradient(
-        f.x, h,
-        f.x, h - height
-      );
-
-      grad.addColorStop(0.0, "rgba(255,160,60,0.55)");
-      grad.addColorStop(0.4, "rgba(255,120,20,0.45)");
-      grad.addColorStop(0.7, "rgba(200,70,10,0.25)");
-      grad.addColorStop(1.0, "rgba(120,30,5,0)");
-
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.ellipse(
-        f.x,
-        h - height / 2,
-        4,
-        height / 2,
-        0,
-        0,
-        Math.PI * 2
-      );
-      ctx.fill();
-
-      f.x += (Math.random() - 0.5) * 0.4;
-      if (f.x < 0) f.x = w;
-      if (f.x > w) f.x = 0;
-    });
-
-    ctx.globalCompositeOperation = "source-over";
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-})();
-</script>
 </body>
 </html>
