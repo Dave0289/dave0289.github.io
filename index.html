@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Common Scents</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
 html, body {
@@ -22,7 +22,7 @@ html, body {
   height: 100%;
 }
 
-/* TEXT */
+/* ================= TEXT ================= */
 .text {
   position: absolute;
   top: 18%;
@@ -46,7 +46,7 @@ html, body {
   letter-spacing: 3px;
 }
 
-/* CANDLE */
+/* ================= CANDLE ================= */
 .candle {
   position: absolute;
   bottom: 6%;
@@ -153,23 +153,41 @@ html, body {
   z-index: -1;
 }
 
-/* ANIMATION */
+/* FLAME MOTION */
 @keyframes flameFlicker {
-  0% {
-    transform: translateX(-50%) scaleY(1);
-    opacity: 0.95;
-  }
-  50% {
-    transform: translateX(-50%) scaleY(1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-50%) scaleY(0.98);
-    opacity: 0.92;
-  }
+  0%   { transform: translateX(-50%) scaleY(1);    opacity: 0.95; }
+  50%  { transform: translateX(-50%) scaleY(1.05); opacity: 1; }
+  100% { transform: translateX(-50%) scaleY(0.98); opacity: 0.92; }
 }
 
-/* MOBILE */
+/* ================= WAX MELTS ================= */
+.wax-melt {
+  position: absolute;
+  bottom: 6%;
+  left: 10%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 120px;
+  z-index: 2;
+}
+
+.wax-melt .cube {
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      to bottom,
+      #7a1f2b,
+      #5b141f
+    );
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,0.15),
+    inset 0 -4px 8px rgba(0,0,0,0.35),
+    0 8px 16px rgba(0,0,0,0.55);
+}
+
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
   .candle {
     width: 170px;
@@ -177,6 +195,10 @@ html, body {
   }
   .flame {
     height: 64px;
+  }
+  .wax-melt {
+    width: 96px;
+    gap: 6px;
   }
 }
 </style>
@@ -187,6 +209,15 @@ html, body {
   <div class="text">
     <h1>COMMON SCENTS</h1>
     <p>Coming Soon · 2026</p>
+  </div>
+
+  <div class="wax-melt">
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
+    <div class="cube"></div>
   </div>
 
   <div class="candle">
