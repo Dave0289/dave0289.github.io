@@ -153,38 +153,63 @@ html, body {
   z-index: -1;
 }
 
-/* FLAME MOTION */
-@keyframes flameFlicker {
-  0%   { transform: translateX(-50%) scaleY(1);    opacity: 0.95; }
-  50%  { transform: translateX(-50%) scaleY(1.05); opacity: 1; }
-  100% { transform: translateX(-50%) scaleY(0.98); opacity: 0.92; }
-}
-
-/* ================= WAX MELTS ================= */
+/* ================= WAX MELTS (3D CUBES) ================= */
 .wax-melt {
   position: absolute;
   bottom: 6%;
-  left: 10%;
+  left: calc(50% - 170px); /* tuck close to candle */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   width: 120px;
   z-index: 2;
+  perspective: 600px;
 }
 
-.wax-melt .cube {
-  aspect-ratio: 1 / 1;
-  border-radius: 10px;
-  background:
-    linear-gradient(
-      to bottom,
-      #7a1f2b,
-      #5b141f
-    );
-  box-shadow:
-    inset 0 3px 6px rgba(255,255,255,0.15),
-    inset 0 -4px 8px rgba(0,0,0,0.35),
-    0 8px 16px rgba(0,0,0,0.55);
+.cube {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  transform-style: preserve-3d;
+  transform: rotateX(12deg) rotateY(-18deg);
+}
+
+/* TOP */
+.cube::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #8a2433;
+  border-radius: 8px;
+  transform: translateZ(12px);
+  box-shadow: inset 0 3px 5px rgba(255,255,255,0.18);
+}
+
+/* FRONT */
+.cube::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 100%;
+  height: 12px;
+  background: #6b1a26;
+  border-radius: 0 0 6px 6px;
+  transform: rotateX(-90deg);
+  transform-origin: top;
+}
+
+/* SIDE */
+.cube span {
+  position: absolute;
+  right: -12px;
+  top: 0;
+  width: 12px;
+  height: 100%;
+  background: #5a141f;
+  border-radius: 0 6px 6px 0;
+  transform: rotateY(90deg);
+  transform-origin: left;
 }
 
 /* ================= MOBILE ================= */
@@ -197,8 +222,8 @@ html, body {
     height: 64px;
   }
   .wax-melt {
+    left: calc(50% - 140px);
     width: 96px;
-    gap: 6px;
   }
 }
 </style>
@@ -212,12 +237,12 @@ html, body {
   </div>
 
   <div class="wax-melt">
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
-    <div class="cube"></div>
+    <div class="cube"><span></span></div>
+    <div class="cube"><span></span></div>
+    <div class="cube"><span></span></div>
+    <div class="cube"><span></span></div>
+    <div class="cube"><span></span></div>
+    <div class="cube"><span></span></div>
   </div>
 
   <div class="candle">
