@@ -92,124 +92,94 @@ html, body {
   filter: blur(1px);
 }
 
-/* FLAME */
+/* ================= FLAME ================= */
 .flame {
   position: absolute;
   bottom: 92%;
   left: 50%;
-  width: 26px;
-  height: 78px;
+  width: 28px;
+  height: 84px;
   transform: translateX(-50%);
   background:
     radial-gradient(
       ellipse at center bottom,
       #fff7d6 0%,
-      #ffd67a 38%,
-      #ff9c2a 65%,
-      rgba(255,120,10,0) 82%
+      #ffd67a 40%,
+      #ff9c2a 68%,
+      rgba(255,120,10,0) 84%
     );
   border-radius: 50% 50% 45% 45%;
-  filter: blur(0.4px);
-  animation: flameFlicker 1.8s infinite ease-in-out;
+  filter: blur(0.5px);
+  animation:
+    flameFlicker 1.4s infinite ease-in-out,
+    flameSway 2.8s infinite ease-in-out;
 }
 
-/* FLAME CORE */
+/* INNER CORE */
 .flame::before {
   content: "";
   position: absolute;
-  bottom: 12%;
+  bottom: 14%;
   left: 50%;
   width: 10px;
-  height: 40px;
+  height: 42px;
   transform: translateX(-50%);
   background:
     radial-gradient(
       ellipse at center,
       #fffdf2 0%,
       #ffe9a8 60%,
-      rgba(255,200,100,0) 80%
+      rgba(255,200,100,0) 82%
     );
   border-radius: 50%;
   filter: blur(0.3px);
+  animation: corePulse 1.2s infinite ease-in-out;
 }
 
 /* FLAME GLOW */
 .flame::after {
   content: "";
   position: absolute;
-  bottom: -24px;
+  bottom: -26px;
   left: 50%;
-  width: 100px;
-  height: 150px;
+  width: 110px;
+  height: 160px;
   transform: translateX(-50%);
   background:
     radial-gradient(
       ellipse at center,
-      rgba(255,150,40,0.20) 0%,
-      rgba(255,100,20,0.12) 35%,
-      rgba(0,0,0,0) 70%
+      rgba(255,160,50,0.22) 0%,
+      rgba(255,110,25,0.14) 36%,
+      rgba(0,0,0,0) 72%
     );
-  filter: blur(20px);
+  filter: blur(22px);
   z-index: -1;
+  animation: glowBreath 2.6s infinite ease-in-out;
 }
 
-/* ================= WAX MELTS (3D CUBES) ================= */
-.wax-melt {
-  position: absolute;
-  bottom: 6%;
-  left: calc(50% - 170px); /* tuck close to candle */
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  width: 120px;
-  z-index: 2;
-  perspective: 600px;
+/* ================= FLAME ANIMATION ================= */
+@keyframes flameFlicker {
+  0%   { height: 82px; opacity: 0.92; }
+  50%  { height: 88px; opacity: 1; }
+  100% { height: 80px; opacity: 0.90; }
 }
 
-.cube {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  transform-style: preserve-3d;
-  transform: rotateX(12deg) rotateY(-18deg);
+@keyframes flameSway {
+  0%   { transform: translateX(-50%) rotate(-1.5deg); }
+  50%  { transform: translateX(-48%) rotate(1.8deg); }
+  100% { transform: translateX(-50%) rotate(-1deg); }
 }
 
-/* TOP */
-.cube::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #8a2433;
-  border-radius: 8px;
-  transform: translateZ(12px);
-  box-shadow: inset 0 3px 5px rgba(255,255,255,0.18);
+@keyframes corePulse {
+  0%   { opacity: 0.85; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.88; }
 }
 
-/* FRONT */
-.cube::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -12px;
-  width: 100%;
-  height: 12px;
-  background: #6b1a26;
-  border-radius: 0 0 6px 6px;
-  transform: rotateX(-90deg);
-  transform-origin: top;
-}
-
-/* SIDE */
-.cube span {
-  position: absolute;
-  right: -12px;
-  top: 0;
-  width: 12px;
-  height: 100%;
-  background: #5a141f;
-  border-radius: 0 6px 6px 0;
-  transform: rotateY(90deg);
-  transform-origin: left;
+@keyframes glowBreath {
+  0%   { opacity: 0.7; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.75; }
 }
 
 /* ================= MOBILE ================= */
@@ -221,10 +191,6 @@ html, body {
   .flame {
     height: 64px;
   }
-  .wax-melt {
-    left: calc(50% - 140px);
-    width: 96px;
-  }
 }
 </style>
 </head>
@@ -234,15 +200,6 @@ html, body {
   <div class="text">
     <h1>COMMON SCENTS</h1>
     <p>Coming Soon · 2026</p>
-  </div>
-
-  <div class="wax-melt">
-    <div class="cube"><span></span></div>
-    <div class="cube"><span></span></div>
-    <div class="cube"><span></span></div>
-    <div class="cube"><span></span></div>
-    <div class="cube"><span></span></div>
-    <div class="cube"><span></span></div>
   </div>
 
   <div class="candle">
