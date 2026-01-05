@@ -29,7 +29,6 @@
       overflow-x:hidden;
     }
 
-    /* Subtle paper texture */
     body::before{
       content:"";
       position:fixed;
@@ -42,7 +41,6 @@
       mix-blend-mode:multiply;
     }
 
-    /* Soft vignette */
     body::after{
       content:"";
       position:fixed;
@@ -62,11 +60,6 @@
       z-index:1;
     }
 
-    /*
-      KEY CHANGE:
-      - Stop relying on aspect-ratio (which can create awkward scaling on phones)
-      - Use a responsive HEIGHT that fits the viewport
-    */
     .card{
       width: min(1120px, 100%);
       height: min(78svh, 720px);
@@ -76,28 +69,21 @@
       border-radius: 22px;
       box-shadow: var(--shadow);
       position: relative;
-      overflow: hidden; /* keep the luxury card edges clean */
+      overflow: hidden;
       opacity: 0;
       transform: translateY(18px) scale(.985);
       animation: enter 1.05s ease forwards;
     }
 
-    /*
-      FIX FOR CROPPED VINES:
-      - The ornate image was getting too close to the rounded corners
-      - Increase inset so nothing touches the clipped card edges
-      - Use contain so we never crop the artwork itself
-    */
     .frame{
       position:absolute;
-      inset: 42px; /* <-- MORE breathing room = no vine clipping */
+      inset: 42px;
       background: url("assets/frame.png") center / contain no-repeat;
       opacity:.93;
       filter: contrast(1.04);
       pointer-events:none;
     }
 
-    /* A subtle inner line to feel intentional */
     .card::after{
       content:"";
       position:absolute;
@@ -107,6 +93,11 @@
       pointer-events:none;
     }
 
+    /*
+      KEY CHANGE:
+      Instead of perfectly centering the content, we push it DOWN a bit so the
+      panel never collides with the scripted "Common Scents" inside the frame art.
+    */
     .content{
       position:absolute;
       inset:0;
@@ -114,12 +105,9 @@
       place-items:center;
       text-align:center;
       padding: clamp(18px, 4vw, 56px);
+      transform: translateY(52px); /* <-- moves panel down on desktop */
     }
 
-    /*
-      Luxury clean: no duplicate "Common Scents".
-      Keep it minimal: small centered panel with whisper text.
-    */
     .panel{
       width: min(640px, 92%);
       padding: clamp(22px, 3.6vw, 44px);
@@ -172,21 +160,28 @@
       100%{ transform:translateX(55%); opacity:0; }
     }
 
-    /* Mobile: taller card, slightly tighter insets, still no cropping */
+    /*
+      MOBILE:
+      Push the panel down even more (this is where you said the box top crosses the text).
+      Also slightly reduce the panel width to keep it elegant.
+    */
     @media (max-width: 720px){
       .card{
         height: min(86svh, 820px);
         border-radius: 24px;
       }
       .frame{
-        inset: 26px; /* still enough to avoid rounded-corner clipping */
+        inset: 26px;
       }
       .card::after{
         inset: 18px;
         border-radius: 20px;
       }
       .panel{
-        width: 94%;
+        width: 92%;
+      }
+      .content{
+        transform: translateY(88px); /* <-- bigger push down on mobile */
       }
     }
 
@@ -216,7 +211,7 @@
       <div class="content">
         <div class="panel">
           <div class="rule"></div>
-          <p class="tagline">Artisan Candles & Fragrance</p>
+          <p class="tagline">Artisan Candles &amp; Fragrance</p>
           <p class="coming">Coming Soon • 2026</p>
         </div>
       </div>
