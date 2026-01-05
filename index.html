@@ -25,8 +25,7 @@
       margin:0;
       font-family:"Playfair Display", serif;
       color:var(--ink);
-      background:
-        radial-gradient(1200px 800px at 50% 35%, #fffaf1 0%, var(--paper) 55%, #efe6da 100%);
+      background: radial-gradient(1200px 800px at 50% 35%, #fffaf1 0%, var(--paper) 55%, #efe6da 100%);
       overflow-x:hidden;
     }
 
@@ -47,8 +46,7 @@
       position:fixed;
       inset:-25%;
       pointer-events:none;
-      background:
-        radial-gradient(circle at 50% 35%, rgba(0,0,0,0) 0%, rgba(0,0,0,.18) 100%);
+      background: radial-gradient(circle at 50% 35%, rgba(0,0,0,0) 0%, rgba(0,0,0,.18) 100%);
       filter: blur(18px);
       opacity:.35;
     }
@@ -95,16 +93,27 @@
       pointer-events:none;
     }
 
-    /* PURE TEXT — no box */
+    /* NO BOX — just text, positioned safely */
     .content{
       position:absolute;
       inset:0;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      pointer-events:none;
+    }
+
+    /*
+      KEY FIX:
+      Use translateY based on the frame’s geometry:
+      - Down from center a bit, but NOT near the bottom vines
+      - Adjusts responsively with clamp()
+    */
+    .copy{
+      transform: translateY(clamp(70px, 10vh, 115px));
       display:flex;
       flex-direction:column;
       align-items:center;
-      justify-content:flex-start;
-      text-align:center;
-      padding-top: 46%;
       gap: 14px;
     }
 
@@ -125,11 +134,7 @@
     .glint{
       position:absolute;
       inset:-40%;
-      background:
-        linear-gradient(110deg,
-          transparent 40%,
-          rgba(255,255,255,.35) 50%,
-          transparent 60%);
+      background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,.35) 50%, transparent 60%);
       transform: translateX(-45%);
       opacity:.35;
       animation: glint 8s ease-in-out infinite;
@@ -146,21 +151,14 @@
       100%{ transform:translateX(55%); opacity:0; }
     }
 
-    /* Mobile — push text slightly LOWER but never off-screen */
+    /* Mobile: bring copy UP slightly so it never touches bottom ornament */
     @media (max-width:720px){
-      .card{
-        height: min(86svh, 820px);
-        border-radius: 24px;
-      }
-      .frame{
-        inset: 26px;
-      }
-      .card::after{
-        inset: 18px;
-        border-radius: 20px;
-      }
-      .content{
-        padding-top: 56%;
+      .card{ height: min(86svh, 820px); border-radius:24px; }
+      .frame{ inset: 26px; }
+      .card::after{ inset: 18px; border-radius: 20px; }
+
+      .copy{
+        transform: translateY(clamp(35px, 6vh, 70px));
         gap: 12px;
       }
     }
@@ -189,8 +187,10 @@
       <div class="glint"></div>
 
       <div class="content">
-        <div class="tagline">Artisan Candles &amp; Fragrance</div>
-        <div class="coming">Coming Soon • 2026</div>
+        <div class="copy">
+          <div class="tagline">Artisan Candles &amp; Fragrance</div>
+          <div class="coming">Coming Soon • 2026</div>
+        </div>
       </div>
     </section>
   </main>
