@@ -18,12 +18,9 @@
       --line: rgba(255,255,255,.14);
 
       --gold: rgba(210, 170, 95, .92);
-      --gold2: rgba(210, 170, 95, .35);
-
       --bg0: #0d0c0a;
       --bg1: #15120d;
       --bg2: #241b12;
-      --bg3: #3a2b1a;
 
       --shadow: 0 26px 80px rgba(0,0,0,.55);
       --radius: 22px;
@@ -43,7 +40,7 @@
     .stage{
       min-height: 100svh;
       position: relative;
-      isolation: isolate;
+      isolation:isolate;
       overflow-x: hidden;   /* keep horizontal clean */
       overflow-y: visible;  /* allow normal page scroll */
     }
@@ -331,7 +328,7 @@
       position:absolute;
       inset: 16px;
       background: url("assets/frame.png") center / contain no-repeat;
-      opacity: .33; /* make it feel like a watermark artifact */
+      opacity: .33;
       filter: contrast(1.1) brightness(1.15);
       transform: translateY(6px);
       pointer-events:none;
@@ -425,47 +422,57 @@
       text-transform: uppercase;
     }
 
+    /* --- OPTION 3: Floating "Back to top" button (shows after scroll) --- */
+    .to-top{
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.45);
+      color: rgba(255,255,255,.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 18px 70px rgba(0,0,0,.35);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .28s ease, transform .28s ease, background .2s ease, border-color .2s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index: 999;
+    }
+    .to-top:hover{
+      background: rgba(0,0,0,.60);
+      border-color: rgba(255,255,255,.26);
+      color: rgba(255,255,255,.92);
+    }
+    .to-top.show{
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
     /* --- Responsive --- */
     @media (max-width: 980px){
-      .hero{
-        grid-template-columns: 1fr;
-      }
-      .artifact{
-        min-height: 360px;
-      }
-      .below{
-        grid-template-columns: 1fr;
-      }
-      nav ul{
-        display:none; /* keep it clean on mobile */
-      }
-      .brand-mini{
-        min-width: auto;
-      }
-      .nav-cta{
-        min-width: auto;
-      }
+      .hero{ grid-template-columns: 1fr; }
+      .artifact{ min-height: 360px; }
+      .below{ grid-template-columns: 1fr; }
+      nav ul{ display:none; }
+      .brand-mini{ min-width: auto; }
+      .nav-cta{ min-width: auto; }
     }
 
     @media (max-width: 520px){
-      h1{
-        letter-spacing: .16em;
-      }
-      .artifact-content{
-        padding: 16px;
-      }
-      .frame-art{
-        inset: 10px;
-        opacity: .28;
-      }
-      .btn{
-        width: 100%;
-        justify-content:center;
-        text-align:center;
-      }
-      .actions{
-        width:100%;
-      }
+      h1{ letter-spacing: .16em; }
+      .artifact-content{ padding: 16px; }
+      .frame-art{ inset: 10px; opacity: .28; }
+      .btn{ width: 100%; text-align:center; }
+      .actions{ width:100%; }
     }
 
     /* subtle entrance animation */
@@ -502,15 +509,15 @@
 
         <nav aria-label="Primary">
           <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#craft">Craft</a></li>
-            <li><a href="#scents">Scents</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about" data-scroll="#about">About</a></li>
+            <li><a href="#craft" data-scroll="#craft">Craft</a></li>
+            <li><a href="#scents" data-scroll="#scents">Scents</a></li>
+            <li><a href="#contact" data-scroll="#contact">Contact</a></li>
           </ul>
         </nav>
 
         <div class="nav-cta">
-          <button class="pill" type="button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+          <button class="pill" type="button" data-scroll="#contact">
             Notify Me
           </button>
         </div>
@@ -532,10 +539,10 @@
         </p>
 
         <div class="actions reveal d4">
-          <button class="btn" type="button" onclick="document.getElementById('scents').scrollIntoView({behavior:'smooth'})">
+          <button class="btn" type="button" data-scroll="#scents">
             Explore the Vision
           </button>
-          <button class="btn secondary" type="button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+          <button class="btn secondary" type="button" data-scroll="#contact">
             Coming Soon • 2026
           </button>
         </div>
@@ -595,7 +602,8 @@
           </p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <a class="btn secondary" href="mailto:info@commonscentsusa.com?subject=Common%20Scents%20-%20Notify%20Me&body=Please%20notify%20me%20when%20Common%20Scents%20launches." style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">
+          <a class="btn secondary" href="mailto:info@commonscentsusa.com?subject=Common%20Scents%20-%20Notify%20Me&body=Please%20notify%20me%20when%20Common%20Scents%20launches."
+             style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">
             Email Us
           </a>
           <button class="btn" type="button" onclick="alert('Next: we’ll add a real email capture + Stripe checkout when you say go.')">
@@ -610,7 +618,49 @@
     </footer>
   </div>
 
+  <!-- OPTION 3 button (appears after scroll) -->
+  <button class="to-top" data-scroll="body" aria-label="Back to top" title="Back to top">
+    ↑
+  </button>
+
   <script>
+    // Robust smooth scroll (avoids scrollIntoView bugs)
+    (function () {
+      const OFFSET = 84; // sticky header offset
+
+      function smoothScrollTo(targetSelector) {
+        // "body" means scroll to the top
+        if (targetSelector === "body") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+
+        const el = document.querySelector(targetSelector);
+        if (!el) return;
+
+        const y = window.pageYOffset + el.getBoundingClientRect().top - OFFSET;
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+      }
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-scroll]");
+        if (!btn) return;
+        e.preventDefault();
+        smoothScrollTo(btn.getAttribute("data-scroll"));
+      });
+    })();
+
+    // Show/hide the back-to-top button
+    (function () {
+      const toTop = document.querySelector(".to-top");
+      function onScroll() {
+        if (window.scrollY > 400) toTop.classList.add("show");
+        else toTop.classList.remove("show");
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    })();
+
     // Gentle parallax (slow, luxury). No frantic motion.
     (function(){
       const bg = document.getElementById('bg');
@@ -625,8 +675,8 @@
         const r = stage.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
-        tx = x * 18;     // horizontal drift
-        ty = y * 12;     // vertical drift
+        tx = x * 18;
+        ty = y * 12;
       }
 
       function tick(){
