@@ -1,211 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Common Scents</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+@font-face {
+  font-family: "EdwardianScript";
+  src: url("assets/fonts/ITCEDSCR.TTF") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 html, body {
   margin: 0;
   width: 100%;
   height: 100%;
-  background: #000;
+  background: #f2f2f2;
   overflow: hidden;
   font-family: "Times New Roman", serif;
-  color: #f2f2f2;
 }
 
 .stage {
-  position: relative;
   width: 100%;
   height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  box-sizing: border-box;
 }
 
-/* ================= TEXT ================= */
-.text {
+.card {
+  position: relative;
+  width: min(980px, 94vw);
+  aspect-ratio: 940 / 644;
+  background: #ffffff;
+  box-shadow: 0 22px 55px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  background: url("assets/frame.png") center / contain no-repeat;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.title {
   position: absolute;
   top: 18%;
   width: 100%;
   text-align: center;
-  z-index: 10;
-  letter-spacing: 4px;
-  pointer-events: none;
-}
-
-.text h1 {
-  margin: 0;
-  font-size: clamp(2.4rem, 6vw, 3.2rem);
-  font-weight: 500;
-}
-
-.text p {
-  margin-top: 18px;
-  font-size: clamp(0.9rem, 3vw, 1.05rem);
-  opacity: 0.85;
-  letter-spacing: 3px;
-}
-
-/* ================= CANDLE ================= */
-.candle {
-  position: absolute;
-  bottom: 6%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 220px;
-  height: 320px;
   z-index: 3;
 }
 
-/* FROSTED GLASS JAR */
-.jar {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 26px;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.38),
-      rgba(255,255,255,0.22) 25%,
-      rgba(235,235,235,0.18) 60%,
-      rgba(215,215,215,0.26)
-    );
-  box-shadow:
-    inset 0 0 26px rgba(255,255,255,0.35),
-    inset 0 -30px 42px rgba(0,0,0,0.30),
-    0 22px 40px rgba(0,0,0,0.65);
-  backdrop-filter: blur(6px);
+.title h1 {
+  margin: 0;
+  font-family: "EdwardianScript", serif;
+  font-size: clamp(3.6rem, 8vw, 6.6rem);
+  font-weight: normal;
+  color: #111;
 }
 
-/* GLASS RIM */
-.jar::before {
-  content: "";
-  position: absolute;
-  top: 6px;
-  left: 8%;
-  width: 84%;
-  height: 18px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.55);
-  filter: blur(1px);
-}
-
-/* ================= FLAME ================= */
-.flame {
-  position: absolute;
-  bottom: 92%;
-  left: 50%;
-  width: 28px;
-  height: 84px;
-  transform: translateX(-50%);
-  background:
-    radial-gradient(
-      ellipse at center bottom,
-      #fff7d6 0%,
-      #ffd67a 40%,
-      #ff9c2a 68%,
-      rgba(255,120,10,0) 84%
-    );
-  border-radius: 50% 50% 45% 45%;
-  filter: blur(0.5px);
-  animation:
-    flameFlicker 1.4s infinite ease-in-out,
-    flameSway 2.8s infinite ease-in-out;
-}
-
-/* INNER CORE */
-.flame::before {
-  content: "";
-  position: absolute;
-  bottom: 14%;
-  left: 50%;
-  width: 10px;
-  height: 42px;
-  transform: translateX(-50%);
-  background:
-    radial-gradient(
-      ellipse at center,
-      #fffdf2 0%,
-      #ffe9a8 60%,
-      rgba(255,200,100,0) 82%
-    );
-  border-radius: 50%;
-  filter: blur(0.3px);
-  animation: corePulse 1.2s infinite ease-in-out;
-}
-
-/* FLAME GLOW */
-.flame::after {
-  content: "";
-  position: absolute;
-  bottom: -26px;
-  left: 50%;
-  width: 110px;
-  height: 160px;
-  transform: translateX(-50%);
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(255,160,50,0.22) 0%,
-      rgba(255,110,25,0.14) 36%,
-      rgba(0,0,0,0) 72%
-    );
-  filter: blur(22px);
-  z-index: -1;
-  animation: glowBreath 2.6s infinite ease-in-out;
-}
-
-/* ================= FLAME ANIMATION ================= */
-@keyframes flameFlicker {
-  0%   { height: 82px; opacity: 0.92; }
-  50%  { height: 88px; opacity: 1; }
-  100% { height: 80px; opacity: 0.90; }
-}
-
-@keyframes flameSway {
-  0%   { transform: translateX(-50%) rotate(-1.5deg); }
-  50%  { transform: translateX(-48%) rotate(1.8deg); }
-  100% { transform: translateX(-50%) rotate(-1deg); }
-}
-
-@keyframes corePulse {
-  0%   { opacity: 0.85; }
-  50%  { opacity: 1; }
-  100% { opacity: 0.88; }
-}
-
-@keyframes glowBreath {
-  0%   { opacity: 0.7; }
-  50%  { opacity: 1; }
-  100% { opacity: 0.75; }
-}
-
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-  .candle {
-    width: 170px;
-    height: 250px;
-  }
-  .flame {
-    height: 64px;
-  }
+.title p {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  letter-spacing: 3px;
+  color: rgba(0,0,0,0.7);
 }
 </style>
 </head>
 
 <body>
-<div class="stage">
-  <div class="text">
-    <h1>COMMON SCENTS</h1>
-    <p>Coming Soon · 2026</p>
+  <div class="stage">
+    <div class="card">
+      <div class="title">
+        <h1>Common Scents</h1>
+        <p>COMING SOON · 2026</p>
+      </div>
+      <div class="frame"></div>
+    </div>
   </div>
-
-  <div class="candle">
-    <div class="flame"></div>
-    <div class="jar"></div>
-  </div>
-</div>
 </body>
 </html>
