@@ -43,8 +43,9 @@
     .stage{
       min-height: 100svh;
       position: relative;
-      isolation:isolate;
-      overflow:hidden;
+      isolation: isolate;
+      overflow-x: hidden;   /* keep horizontal clean */
+      overflow-y: visible;  /* allow normal page scroll */
     }
 
     .bg{
