@@ -8,19 +8,19 @@
   <style>
     html, body {
       margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
+      background: #000; /* intentional border background */
       overflow: hidden;
-      background: #000;
     }
 
-    /* Full-screen image fill */
-    .frame-full {
+    img.frame {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
-      object-fit: cover;     /* fills screen */
+      object-fit: contain;   /* ← OPTION A */
       object-position: center;
       display: block;
     }
@@ -28,6 +28,10 @@
 </head>
 
 <body>
-  <img class="frame-full" src="assets/frame.png" alt="Common Scents Frame">
+  <img
+    class="frame"
+    src="assets/frame.png"
+    alt="Common Scents Coming Soon"
+  />
 </body>
 </html>
