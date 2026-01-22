@@ -16,50 +16,81 @@
       --ink3: rgba(255,255,255,.55);
       --line: rgba(255,255,255,.14);
 
-      --gold: rgba(210, 170, 95, .92);
-      --gold2: rgba(210, 170, 95, .55);
+      --gold: rgba(210,170,95,.92);
+      --gold2: rgba(210,170,95,.55);
 
-      --bg0: #0d0c0a;
-      --bg1: #15120d;
-      --bg2: #241b12;
+      --bg0:#0d0c0a;
+      --bg1:#15120d;
+      --bg2:#241b12;
 
       --shadow: 0 26px 80px rgba(0,0,0,.55);
-      --radius: 26px;
+      --radius: 22px;
 
-      --leatherA: rgba(16, 13, 10, .98);
-      --leatherB: rgba(7, 6, 5, .98);
-      --paper: rgba(255,255,255,.05);
+      --leatherA: rgba(22,15,10,.86);
+      --leatherB: rgba(34,22,14,.92);
+      --paper: rgba(255,246,232,.055);
     }
 
-    *{ box-sizing:border-box; }
-    html, body{ height:100%; }
-    body{
-      margin:0;
-      color: var(--ink);
-      background: #0b0a08;
-      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    /* ========= HORIZONTAL OVERFLOW FIX ========= */
+    html, body{
+      width:100%;
+      max-width:100%;
       overflow-x:hidden;
     }
+    *{ box-sizing:border-box; max-width:100%; }
+    img, svg{ max-width:100%; height:auto; }
+    h1,h2,h3,p,a,button,span,li,div{
+      overflow-wrap:anywhere;
+      word-break:break-word;
+    }
 
-    /* Ambient backdrop (matches your homepage vibe) */
+    body{
+      margin:0;
+      color:var(--ink);
+      background:#0b0a08;
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    /* --- Cinematic background (matches homepage vibe) --- */
     .stage{
-      min-height: 100svh;
+      min-height:100svh;
       position:relative;
       isolation:isolate;
-      padding: 22px 18px 70px;
+      overflow-x:hidden;
+      overflow-y:visible;
     }
     .bg{
       position:absolute;
       inset:-30%;
       z-index:-3;
       background:
-        radial-gradient(900px 540px at 48% 46%, rgba(255, 220, 160, .10) 0%, rgba(0,0,0,0) 55%),
+        radial-gradient(900px 540px at 48% 46%, rgba(255,220,160,.10) 0%, rgba(0,0,0,0) 55%),
         radial-gradient(720px 520px at 68% 52%, rgba(210,170,95,.12) 0%, rgba(0,0,0,0) 58%),
-        radial-gradient(1200px 800px at 38% 45%, rgba(120, 90, 55, .20) 0%, rgba(0,0,0,0) 60%),
-        radial-gradient(1800px 1200px at 55% 40%, rgba(40, 30, 18, .95) 0%, rgba(10,8,6,1) 60%),
+        radial-gradient(1200px 800px at 38% 45%, rgba(120,90,55,.20) 0%, rgba(0,0,0,0) 60%),
+        radial-gradient(1800px 1200px at 55% 40%, rgba(40,30,18,.95) 0%, rgba(10,8,6,1) 60%),
         linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 30%, var(--bg2) 70%, var(--bg0) 100%);
       filter:saturate(1.05) contrast(1.05);
-      transform: scale(1.06);
+      transform: translate3d(var(--px,0px), var(--py,0px), 0) scale(1.06);
+      transition: transform 140ms ease;
+    }
+    .grain{
+      position:absolute;
+      inset:-40%;
+      z-index:-2;
+      opacity:.14;
+      pointer-events:none;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      background-size:260px 260px;
+      mix-blend-mode: overlay;
+      animation: grain 10s steps(10) infinite;
+    }
+    @keyframes grain{
+      0%{ transform: translate3d(0,0,0); }
+      25%{ transform: translate3d(-3%, 2%,0); }
+      50%{ transform: translate3d(2%, -2%,0); }
+      75%{ transform: translate3d(-2%, -3%,0); }
+      100%{ transform: translate3d(0,0,0); }
     }
     .vignette{
       position:absolute;
@@ -71,63 +102,100 @@
       opacity:.9;
     }
 
-    /* Header */
+    /* --- Sticky header --- */
     header{
-      max-width: 1100px;
-      margin: 0 auto 14px;
+      position:sticky;
+      top:0;
+      z-index:80;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,0));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      max-width:1200px;
+      margin:0 auto;
+      padding:16px 18px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap:12px;
     }
-    .brand{
+    .brand-mini{
       display:flex;
       align-items:center;
-      gap: 12px;
+      gap:12px;
     }
     .dot{
-      width: 9px;
-      height: 9px;
-      border-radius: 99px;
-      background: var(--gold);
+      width:9px;height:9px;border-radius:999px;
+      background:var(--gold);
       box-shadow: 0 0 0 6px rgba(210,170,95,.08);
+      flex:0 0 auto;
     }
-    .brand .label{
+    .label{
       display:flex;
       flex-direction:column;
       line-height:1.1;
     }
-    .brand .label b{
+    .label b{
       font-family:"Playfair Display", serif;
       letter-spacing:.08em;
       font-weight:600;
-      font-size: 14px;
-      text-transform: uppercase;
+      font-size:14px;
+      text-transform:uppercase;
     }
-    .brand .label span{
-      font-size: 11px;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--ink3);
-      margin-top: 3px;
+    .label span{
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--ink3);
+      margin-top:3px;
     }
 
+    nav ul{
+      list-style:none;
+      padding:0;margin:0;
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+    nav a{
+      color:var(--ink2);
+      text-decoration:none;
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      padding:10px 8px;
+      border-radius:12px;
+      transition: color .2s ease, background .2s ease;
+    }
+    nav a:hover{
+      color:var(--ink);
+      background: rgba(255,255,255,.06);
+    }
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex:0 0 auto;
+    }
     .pill{
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.05);
-      color: var(--ink2);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--ink2);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
       cursor:pointer;
       transition: transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
-      text-decoration:none;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap: 8px;
+      text-decoration:none;
+      white-space:nowrap;
     }
     .pill:hover{
       transform: translateY(-1px);
@@ -136,55 +204,119 @@
       color: var(--ink);
     }
 
-    /* Leather-bound “book” */
-    .book{
-      max-width: 1100px;
-      margin:  12px auto 0;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255,255,255,.10);
-      background:
-        radial-gradient(900px 500px at 40% 35%, rgba(255,255,255,.06), rgba(0,0,0,0) 62%),
-        radial-gradient(1100px 700px at 70% 60%, rgba(210,170,95,.08), rgba(0,0,0,0) 65%),
-        linear-gradient(135deg, var(--leatherA), var(--leatherB));
+    .cart-btn{
       position:relative;
-      overflow:hidden;
+      min-width:44px;
+      width:44px;height:44px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.35);
+      color: rgba(255,255,255,.86);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      flex:0 0 auto;
+    }
+    .cart-btn:hover{
+      transform: translateY(-1px);
+      background: rgba(0,0,0,.55);
+      border-color: rgba(255,255,255,.26);
+    }
+    .badge{
+      position:absolute;
+      top:-6px; right:-6px;
+      min-width:18px;
+      height:18px;
+      padding:0 6px;
+      border-radius:999px;
+      background: rgba(210,170,95,.92);
+      color:#0b0a08;
+      font-size:11px;
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
     }
 
-    /* Leather grain */
+    /* --- Page header --- */
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding: clamp(18px, 4vw, 34px) 18px 70px;
+    }
+
+    .titlebar{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:16px;
+      margin-top: 8px;
+      flex-wrap:wrap;
+    }
+
+    h1{
+      margin:0;
+      font-family:"Playfair Display", serif;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:.20em;
+      line-height:1.08;
+      font-size: clamp(28px, 3.8vw, 54px);
+      text-shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+    .subtitle{
+      margin: 12px 0 0;
+      color: var(--ink2);
+      font-weight:300;
+      line-height:1.7;
+      max-width: 68ch;
+      font-size: 14px;
+    }
+
+    .chiprow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 14px;
+    }
+    .chip{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: var(--ink2);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    /* --- Leather-bound menu book --- */
+    .book{
+      margin-top: 22px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(1400px 800px at 30% 20%, rgba(210,170,95,.10), rgba(0,0,0,0) 60%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        linear-gradient(135deg, var(--leatherA), var(--leatherB));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Subtle "spine" divider for desktop */
     .book::before{
       content:"";
       position:absolute;
-      inset:-40%;
-      opacity:.18;
-      pointer-events:none;
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-      background-size: 260px 260px;
-      mix-blend-mode: overlay;
-      transform: rotate(-2deg);
-    }
-
-    /* Gilt edge */
-    .book::after{
-      content:"";
-      position:absolute;
-      inset: 10px;
-      border-radius: calc(var(--radius) - 10px);
-      border: 1px solid rgba(210,170,95,.25);
-      pointer-events:none;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-    }
-
-    /* Spine hint */
-    .spine{
-      position:absolute;
-      top:0; bottom:0;
-      left: 50%;
-      width: 2px;
-      background: linear-gradient(180deg, rgba(210,170,95,.0), rgba(210,170,95,.35), rgba(210,170,95,.0));
+      top:0;bottom:0;
+      left:50%;
+      width:1px;
+      background: linear-gradient(180deg, rgba(210,170,95,.0), rgba(210,170,95,.22), rgba(210,170,95,.0));
       opacity:.55;
-      transform: translateX(-1px);
       pointer-events:none;
     }
 
@@ -192,304 +324,919 @@
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 0;
-      padding: 26px;
     }
 
     .page{
-      padding: 22px;
-    }
-
-    .page-inner{
-      border-radius: 18px;
+      padding: clamp(16px, 2.2vw, 26px);
       background:
-        radial-gradient(900px 600px at 30% 30%, rgba(255,255,255,.06), rgba(0,0,0,0) 62%),
-        rgba(0,0,0,.26);
-      border: 1px solid rgba(255,255,255,.10);
-      padding: 22px 22px 20px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      min-height: 560px;
+        radial-gradient(900px 500px at 50% 25%, rgba(255,246,232,.08), rgba(0,0,0,0) 62%),
+        linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.42));
+      position:relative;
+      overflow:hidden;
     }
 
-    .menu-title{
-      text-align:center;
-      margin-bottom: 16px;
-    }
-    .menu-title .kicker{
-      color: var(--ink3);
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      font-size: 11px;
-      margin: 0 0 8px;
-    }
-    .menu-title h1{
-      margin: 0 0 10px;
-      font-family: "Playfair Display", serif;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .20em;
-      font-size: 22px;
-    }
-    .rule{
-      height: 1px;
-      width: 74%;
-      margin: 0 auto;
-      background: linear-gradient(90deg, rgba(210,170,95,0), rgba(210,170,95,.55), rgba(210,170,95,0));
-      opacity:.9;
-    }
-
-    .section{
-      margin-top: 18px;
-    }
-    .section h2{
-      margin: 0 0 10px;
-      font-size: 11px;
-      letter-spacing: .30em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 500;
+    .pagehead{
       display:flex;
       align-items:baseline;
       justify-content:space-between;
-      gap: 12px;
+      gap:12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
     }
-    .section h2 small{
+    .pagehead h2{
+      margin:0;
+      font-family:"Playfair Display", serif;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size: 16px;
+    }
+    .pagehead .small{
       color: var(--ink3);
-      font-weight: 400;
-      letter-spacing: .20em;
-      text-transform: uppercase;
-      font-size: 10px;
-      white-space: nowrap;
+      font-size: 11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      line-height:1.4;
+      text-align:right;
+    }
+
+    /* Menu items */
+    .items{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
     }
 
     .item{
-      display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap: 14px;
-      padding: 10px 0;
-      border-bottom: 1px dashed rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      border-radius: 18px;
+      padding: 12px 12px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px 12px;
+      align-items:center;
     }
-    .item:last-child{ border-bottom:none; }
 
     .name{
-      font-family: "Playfair Display", serif;
-      letter-spacing: .10em;
+      font-family:"Playfair Display", serif;
+      letter-spacing:.10em;
       text-transform: uppercase;
-      font-weight: 500;
+      font-weight:500;
       font-size: 14px;
       margin:0;
     }
     .desc{
       margin: 6px 0 0;
       color: var(--ink2);
-      font-weight: 300;
-      line-height: 1.6;
+      font-weight:300;
+      line-height:1.55;
       font-size: 12.5px;
-      max-width: 52ch;
+      max-width: 54ch;
+    }
+
+    .right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
     }
     .price{
-      color: var(--ink2);
-      font-size: 12px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
+      color: var(--gold);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      font-size: 11px;
       white-space:nowrap;
-      padding-left: 10px;
-      min-width: 70px;
-      text-align:right;
     }
 
-    /* Coming soon styling for candles */
-    .muted{
-      opacity:.62;
+    .qty{
+      display:inline-flex;
+      align-items:center;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      overflow:hidden;
+      height: 36px;
     }
-    .muted .price{
-      color: var(--ink3);
+    .qbtn{
+      width: 34px;
+      height: 34px;
+      border:0;
+      background: transparent;
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size: 16px;
+      transition: background .2s ease;
+    }
+    .qbtn:hover{ background: rgba(255,255,255,.07); }
+    .qval{
+      min-width: 30px;
+      text-align:center;
+      color: rgba(255,255,255,.88);
+      font-size: 12px;
+      letter-spacing:.10em;
     }
 
-    .footnote{
-      margin-top: 18px;
-      color: var(--ink3);
+    .add{
+      border: 1px solid rgba(210,170,95,.60);
+      background: rgba(210,170,95,.12);
+      color: var(--ink);
+      padding: 10px 12px;
+      height: 36px;
+      border-radius: 999px;
       font-size: 11px;
       letter-spacing: .22em;
       text-transform: uppercase;
-      text-align:center;
-      line-height: 1.7;
+      cursor:pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      white-space:nowrap;
+    }
+    .add:hover{
+      transform: translateY(-1px);
+      background: rgba(210,170,95,.18);
+      border-color: rgba(210,170,95,.92);
     }
 
-    /* Responsive */
+    .muted-note{
+      margin-top: 14px;
+      color: var(--ink3);
+      font-size: 11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      line-height:1.6;
+    }
+
+    /* --- Cart drawer --- */
+    .drawerOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease;
+      z-index: 120;
+    }
+    .drawerOverlay.show{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .drawer{
+      position:fixed;
+      top:0; right:0;
+      height:100%;
+      width: min(420px, 92vw);
+      background:
+        radial-gradient(900px 420px at 30% 10%, rgba(210,170,95,.10), rgba(0,0,0,0) 60%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        linear-gradient(135deg, rgba(22,15,10,.92), rgba(10,8,6,.92));
+      border-left: 1px solid rgba(255,255,255,.10);
+      box-shadow: -30px 0 90px rgba(0,0,0,.55);
+      transform: translateX(110%);
+      transition: transform .22s ease;
+      z-index: 130;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden; /* critical: prevents horizontal bleed */
+    }
+    .drawer.open{ transform: translateX(0); }
+
+    .drawerHead{
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .drawerHead b{
+      font-family:"Playfair Display", serif;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:500;
+      font-size: 14px;
+    }
+    .x{
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.35);
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .x:hover{
+      background: rgba(0,0,0,.55);
+      border-color: rgba(255,255,255,.24);
+      transform: translateY(-1px);
+    }
+
+    .drawerBody{
+      padding: 14px 16px;
+      overflow:auto;
+    }
+
+    .cartLine{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding: 12px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items:center;
+      margin-bottom: 10px;
+    }
+    .cartName{
+      margin:0;
+      font-family:"Playfair Display", serif;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+      font-weight:500;
+      font-size: 13px;
+    }
+    .cartMeta{
+      margin:6px 0 0;
+      color: var(--ink3);
+      font-size: 11px;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      line-height:1.5;
+    }
+    .cartRight{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:8px;
+    }
+    .cartPrice{
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing:.18em;
+      text-transform: uppercase;
+      white-space:nowrap;
+    }
+    .miniQty{
+      display:inline-flex;
+      align-items:center;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      overflow:hidden;
+      height: 32px;
+    }
+    .miniQty button{
+      width: 30px; height: 30px;
+      border:0;
+      background: transparent;
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      transition: background .2s ease;
+      font-size: 15px;
+    }
+    .miniQty button:hover{ background: rgba(255,255,255,.07); }
+    .miniQty span{
+      min-width: 26px;
+      text-align:center;
+      font-size: 11px;
+      letter-spacing:.10em;
+      color: rgba(255,255,255,.88);
+    }
+
+    .empty{
+      color: var(--ink3);
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform: uppercase;
+      line-height:1.6;
+      padding: 10px 2px;
+    }
+
+    .drawerFoot{
+      margin-top:auto;
+      padding: 14px 16px 16px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+    }
+    .totalRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color: var(--ink2);
+      font-size: 11px;
+      letter-spacing:.18em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .totalRow b{
+      color: var(--gold);
+      font-weight:600;
+      letter-spacing:.18em;
+    }
+    .checkout{
+      width:100%;
+      border: 1px solid rgba(210,170,95,.60);
+      background: rgba(210,170,95,.12);
+      color: var(--ink);
+      padding: 14px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      cursor:pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      box-shadow: 0 14px 40px rgba(0,0,0,.25);
+    }
+    .checkout:hover{
+      transform: translateY(-1px);
+      background: rgba(210,170,95,.18);
+      border-color: rgba(210,170,95,.92);
+    }
+    .fineprint{
+      margin-top: 10px;
+      color: var(--ink3);
+      font-size: 10px;
+      letter-spacing:.16em;
+      text-transform: uppercase;
+      line-height:1.6;
+    }
+
+    /* --- Modal (Option B) --- */
+    .modalWrap{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 200;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease;
+      background: rgba(0,0,0,.62);
+    }
+    .modalWrap.show{
+      opacity:1;
+      pointer-events:auto;
+    }
+    .modal{
+      width: min(520px, 92vw);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(700px 320px at 35% 10%, rgba(210,170,95,.14), rgba(0,0,0,0) 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+        linear-gradient(135deg, rgba(22,15,10,.92), rgba(10,8,6,.92));
+      box-shadow: 0 26px 110px rgba(0,0,0,.70);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .modalHead b{
+      font-family:"Playfair Display", serif;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:500;
+      font-size: 14px;
+    }
+    .modalBody{
+      padding: 14px 18px 18px;
+      color: var(--ink2);
+      font-weight:300;
+      line-height:1.7;
+      font-size: 13.5px;
+    }
+    .modalBody p{ margin: 0 0 12px; }
+    .modalActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding: 0 18px 18px;
+    }
+    .btn{
+      border: 1px solid rgba(210,170,95,.60);
+      background: rgba(210,170,95,.12);
+      color: var(--ink);
+      padding: 12px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing:.22em;
+      text-transform: uppercase;
+      cursor:pointer;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(210,170,95,.18);
+      border-color: rgba(210,170,95,.92);
+    }
+    .btn.secondary{
+      border-color: rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--ink2);
+    }
+    .btn.secondary:hover{
+      background: rgba(255,255,255,.10);
+      border-color: rgba(255,255,255,.22);
+      color: var(--ink);
+    }
+
+    footer{
+      max-width:1200px;
+      margin: 18px auto 28px;
+      padding: 0 18px;
+      color: var(--ink3);
+      font-size: 11px;
+      letter-spacing:.24em;
+      text-transform: uppercase;
+      text-align:center;
+    }
+
+    /* --- Responsive --- */
     @media (max-width: 980px){
+      nav ul{ display:none; }
+      .book::before{ display:none; }
       .pages{ grid-template-columns: 1fr; }
-      .spine{ display:none; }
-      .page-inner{ min-height: auto; }
+      .page{ border-top: 1px solid rgba(255,255,255,.08); }
+      .page:first-child{ border-top: none; }
+      .item{ grid-template-columns: 1fr; align-items:start; }
+      .right{ justify-content:flex-start; }
+    }
+
+    @media (max-width: 520px){
+      .nav{ padding: 14px 14px; }
+      .wrap{ padding-left: 14px; padding-right: 14px; }
+      .page{ padding: 14px; }
+      .pill{ padding: 10px 12px; }
+      .cart-btn{ width: 42px; height: 42px; min-width:42px; }
+      .qty{ height: 34px; }
+      .qbtn{ width: 32px; height: 32px; }
+      .add{ height: 34px; padding: 9px 11px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="stage">
-    <div class="bg"></div>
+  <div class="stage" id="stage">
+    <div class="bg" id="bg"></div>
+    <div class="grain"></div>
     <div class="vignette"></div>
 
     <header>
-      <div class="brand">
-        <div class="dot" aria-hidden="true"></div>
-        <div class="label">
-          <b>Common Scents</b>
-          <span>Fragrance Menu</span>
+      <div class="nav">
+        <div class="brand-mini">
+          <div class="dot" aria-hidden="true"></div>
+          <div class="label">
+            <b>Common Scents</b>
+            <span>Menu</span>
+          </div>
         </div>
-      </div>
 
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="pill" href="index.html">← Home</a>
-        <a class="pill" href="mailto:info@commonscentsusa.com?subject=Common%20Scents%20-%20Order%20Inquiry">Reserve / Inquire</a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#wax">Wax Melts</a></li>
+            <li><a href="#candles">Candles</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-right">
+          <a class="pill" href="index.html#contact">Notify Me</a>
+
+          <button class="cart-btn" type="button" id="cartOpen" aria-label="Open cart" title="Cart">
+            🛒
+            <span class="badge" id="cartBadge" style="display:none;">0</span>
+          </button>
+        </div>
       </div>
     </header>
 
-    <main class="book" aria-label="Leather-bound menu">
-      <div class="spine" aria-hidden="true"></div>
+    <main class="wrap">
+      <div class="titlebar">
+        <div>
+          <h1>The Menu</h1>
+          <p class="subtitle">
+            A luxury selection built for warm rooms and slow evenings.
+            Start with wax melts today—candles arrive next.
+          </p>
 
-      <div class="pages">
-        <!-- Left page -->
-        <section class="page">
-          <div class="page-inner">
-            <div class="menu-title">
-              <p class="kicker">Artisan Candles &amp; Fragrance</p>
-              <h1>Signature Collection</h1>
-              <div class="rule"></div>
-            </div>
-
-            <div class="section">
-              <h2>
-                Wax Melts
-                <small>Six-piece clamshell • 12.6 oz total</small>
-              </h2>
-
-              <div class="item">
-                <div>
-                  <p class="name">Apple Harvest</p>
-                  <p class="desc">Crisp orchard apple, warm spice, and a hint of cedar—bright, familiar, and clean.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">Black Raspberry Vanilla</p>
-                  <p class="desc">Dark berries folded into creamy vanilla—rich, rounded, and elegant.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">Cranberry Woods</p>
-                  <p class="desc">Tart cranberry softened by woods and amber—cozy, polished, and warm.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">Fierce AF</p>
-                  <p class="desc">Bold, confident, and addictive—clean heat with a dark, modern edge.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">French Lilac</p>
-                  <p class="desc">Fresh lilac blossoms with a smooth, airy finish—romantic and refined.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-            </div>
-
-            <div class="footnote">
-              $5.00 per clamshell • shipping &amp; handling added at checkout
-            </div>
+          <div class="chiprow">
+            <div class="chip">Wax Melts • 6 per clamshell</div>
+            <div class="chip">Total weight • 12.6 oz</div>
+            <div class="chip">$5.00 each • + shipping &amp; handling</div>
           </div>
-        </section>
-
-        <!-- Right page -->
-        <section class="page">
-          <div class="page-inner">
-            <div class="menu-title">
-              <p class="kicker">Signature Notes</p>
-              <h1>Seasonal &amp; Essentials</h1>
-              <div class="rule"></div>
-            </div>
-
-            <div class="section">
-              <h2>
-                Wax Melts
-                <small>Six-piece clamshell • 12.6 oz total</small>
-              </h2>
-
-              <div class="item">
-                <div>
-                  <p class="name">Japanese Cherry Blossom</p>
-                  <p class="desc">Soft blossoms with a clean, luminous finish—delicate, bright, and smooth.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">Lavender</p>
-                  <p class="desc">Calm lavender with a gentle herbal clarity—quiet luxury for slow evenings.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">Peppermint Eucalyptus</p>
-                  <p class="desc">Cooling mint and spa eucalyptus—clean air, crisp edges, instant reset.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">Sandalwood Element</p>
-                  <p class="desc">Creamy sandalwood with warm resin—minimal, expensive, and grounding.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-
-              <div class="item">
-                <div>
-                  <p class="name">White Peach Blossom</p>
-                  <p class="desc">Soft peach nectar with a floral lift—sunlit, smooth, and quietly sweet.</p>
-                </div>
-                <div class="price">$5.00</div>
-              </div>
-            </div>
-
-            <div class="section">
-              <h2>
-                Candles
-                <small>Coming soon</small>
-              </h2>
-
-              <div class="item muted">
-                <div>
-                  <p class="name">All Signature Fragrances</p>
-                  <p class="desc">Hand-poured vessels in the full collection—launching after wax melts.</p>
-                </div>
-                <div class="price">—</div>
-              </div>
-            </div>
-
-            <div class="footnote">
-              For bulk, events, or custom runs, tap “Reserve / Inquire”
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
+
+      <section class="book" aria-label="Leather-bound menu">
+        <div class="pages">
+          <!-- LEFT PAGE -->
+          <section class="page" id="wax" aria-label="Wax melts">
+            <div class="pagehead">
+              <h2>Wax Melts</h2>
+              <div class="small">
+                $5.00 / clamshell<br>
+                6 melts • 12.6 oz
+              </div>
+            </div>
+
+            <div class="items" id="waxItems">
+              <!-- Items injected by JS -->
+            </div>
+
+            <div class="muted-note">
+              Tip: Add a few scents and keep them in rotation—your house will feel expensive on purpose.
+            </div>
+          </section>
+
+          <!-- RIGHT PAGE -->
+          <section class="page" id="candles" aria-label="Candles coming soon">
+            <div class="pagehead">
+              <h2>Candles</h2>
+              <div class="small">
+                Coming soon<br>
+                Same signature scents
+              </div>
+            </div>
+
+            <div class="items" id="candleItems">
+              <div class="item" style="grid-template-columns: 1fr;">
+                <div>
+                  <p class="name" style="margin:0;">Candles are coming next</p>
+                  <p class="desc" style="margin-top:8px;">
+                    We’re launching wax melts first. Candle pours will follow in these same signature fragrances—
+                    with the same luxury finish as the main page.
+                  </p>
+                  <p class="desc" style="margin-top:8px;color:var(--ink3);">
+                    Want first access? Tap “Notify Me” and we’ll send the launch drop.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="muted-note">
+              Online ordering will open soon. The cart below is live for selecting quantities and building your list.
+            </div>
+          </section>
+        </div>
+      </section>
     </main>
+
+    <footer>
+      commonscentsusa.com
+    </footer>
+
+    <!-- CART DRAWER -->
+    <div class="drawerOverlay" id="drawerOverlay" aria-hidden="true"></div>
+
+    <aside class="drawer" id="drawer" aria-label="Cart drawer">
+      <div class="drawerHead">
+        <b>Your Cart</b>
+        <button class="x" id="cartClose" type="button" aria-label="Close cart">✕</button>
+      </div>
+
+      <div class="drawerBody">
+        <div id="cartLines"></div>
+        <div class="empty" id="cartEmpty" style="display:none;">
+          Your cart is empty.<br>
+          Add a scent from the menu.
+        </div>
+      </div>
+
+      <div class="drawerFoot">
+        <div class="totalRow">
+          <span>Subtotal</span>
+          <b id="cartTotal">$0.00</b>
+        </div>
+        <button class="checkout" type="button" id="checkoutBtn">
+          Checkout
+        </button>
+        <div class="fineprint">
+          Shipping &amp; handling calculated at launch. Online ordering coming soon.
+        </div>
+      </div>
+    </aside>
+
+    <!-- OPTION B MODAL -->
+    <div class="modalWrap" id="modalWrap" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Online ordering coming soon">
+        <div class="modalHead">
+          <b>Online Ordering Coming Soon</b>
+          <button class="x" id="modalClose" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="modalBody">
+          <p>
+            We’re finalizing checkout and payments.
+          </p>
+          <p>
+            For now, build your cart so you’re ready when ordering opens.
+          </p>
+          <p style="color:var(--ink3);letter-spacing:.14em;text-transform:uppercase;font-size:11px;margin-bottom:0;">
+            Want first access? Join the launch list.
+          </p>
+        </div>
+        <div class="modalActions">
+          <a class="btn" href="index.html#contact">Notify Me</a>
+          <button class="btn secondary" type="button" id="modalOk">Got it</button>
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <script>
+    // ---------- Products ----------
+    // Update descriptions anytime; names preserved (including Fierce AF).
+    const PRICE = 5.00;
+
+    const WAX = [
+      { id:"fierce_af", name:"Fierce AF", desc:"Bold, clean, and addictive. A confident room-filler with a high-end edge." },
+      { id:"cranberry_woods", name:"Cranberry Woods", desc:"Bright fruit up front with warm woods underneath. Holiday energy without the cliché." },
+      { id:"coconut_santal", name:"Coconut Santal", desc:"Creamy coconut + soft sandalwood. Spa-luxury and calm." },
+      { id:"mahogany_teakwood", name:"Mahogany Teakwood", desc:"Rich woods, smooth and masculine. The classic “expensive hotel lobby” feel." },
+      { id:"smoked_vanilla", name:"Smoked Vanilla", desc:"Vanilla with depth—soft smoke, warm amber, and slow evening vibes." },
+      { id:"tobacco_ember", name:"Tobacco Ember", desc:"Warm tobacco leaf, resin, and a faint ember. Dark, refined, and grown." }
+    ];
+
+    // If you have an official fragrance list image you sent earlier,
+    // we can replace the WAX array with the exact names/notes—just say so.
+
+    // ---------- State ----------
+    const CART_KEY = "commonscents_cart_v1";
+    let cart = loadCart();
+
+    function loadCart(){
+      try{
+        const raw = localStorage.getItem(CART_KEY);
+        return raw ? JSON.parse(raw) : {};
+      }catch(e){
+        return {};
+      }
+    }
+    function saveCart(){
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    function cartCount(){
+      return Object.values(cart).reduce((a,b)=>a + b, 0);
+    }
+    function cartSubtotal(){
+      return cartCount() * PRICE;
+    }
+    function money(n){
+      return "$" + n.toFixed(2);
+    }
+
+    // ---------- Render Menu Items ----------
+    function makeItem(product){
+      const el = document.createElement("div");
+      el.className = "item";
+      el.dataset.pid = product.id;
+
+      el.innerHTML = `
+        <div>
+          <p class="name">${product.name}</p>
+          <p class="desc">${product.desc}</p>
+        </div>
+
+        <div class="right">
+          <span class="price">${money(PRICE)}</span>
+
+          <div class="qty" aria-label="Quantity selector">
+            <button class="qbtn" type="button" data-act="dec" aria-label="Decrease">−</button>
+            <span class="qval" data-q="1">1</span>
+            <button class="qbtn" type="button" data-act="inc" aria-label="Increase">+</button>
+          </div>
+
+          <button class="add" type="button" data-act="add">Add</button>
+        </div>
+      `;
+
+      return el;
+    }
+
+    function renderMenu(){
+      const waxWrap = document.getElementById("waxItems");
+      waxWrap.innerHTML = "";
+      WAX.forEach(p => waxWrap.appendChild(makeItem(p)));
+    }
+
+    // ---------- Menu Interactions ----------
+    document.addEventListener("click", (e) => {
+      const addBtn = e.target.closest("[data-act='add']");
+      const qBtn = e.target.closest("[data-act='inc'],[data-act='dec']");
+
+      if (qBtn){
+        const qtyWrap = qBtn.closest(".qty");
+        const val = qtyWrap.querySelector("[data-q]");
+        let n = parseInt(val.textContent || "1", 10);
+        if (qBtn.dataset.act === "inc") n++;
+        if (qBtn.dataset.act === "dec") n = Math.max(1, n-1);
+        val.textContent = String(n);
+        return;
+      }
+
+      if (addBtn){
+        const item = addBtn.closest(".item");
+        const pid = item.dataset.pid;
+        const qty = parseInt(item.querySelector("[data-q]").textContent || "1", 10);
+
+        cart[pid] = (cart[pid] || 0) + qty;
+        saveCart();
+        updateCartUI();
+
+        // open drawer for nice feedback
+        openDrawer();
+        return;
+      }
+    });
+
+    // ---------- Cart Drawer ----------
+    const drawer = document.getElementById("drawer");
+    const overlay = document.getElementById("drawerOverlay");
+    const cartOpen = document.getElementById("cartOpen");
+    const cartClose = document.getElementById("cartClose");
+
+    function openDrawer(){
+      overlay.classList.add("show");
+      drawer.classList.add("open");
+      document.body.style.overflow = "hidden"; // prevents background scroll
+    }
+    function closeDrawer(){
+      overlay.classList.remove("show");
+      drawer.classList.remove("open");
+      document.body.style.overflow = ""; // restore
+    }
+
+    cartOpen.addEventListener("click", openDrawer);
+    cartClose.addEventListener("click", closeDrawer);
+    overlay.addEventListener("click", closeDrawer);
+
+    // ---------- Cart Lines Render ----------
+    const cartLines = document.getElementById("cartLines");
+    const cartEmpty = document.getElementById("cartEmpty");
+    const cartBadge = document.getElementById("cartBadge");
+    const cartTotal = document.getElementById("cartTotal");
+
+    function productById(id){
+      return WAX.find(p => p.id === id) || { name:"Item", desc:"" };
+    }
+
+    function renderCart(){
+      cartLines.innerHTML = "";
+      const entries = Object.entries(cart).filter(([k,v]) => v > 0);
+
+      if (entries.length === 0){
+        cartEmpty.style.display = "block";
+      } else {
+        cartEmpty.style.display = "none";
+      }
+
+      entries.forEach(([pid, qty]) => {
+        const p = productById(pid);
+
+        const line = document.createElement("div");
+        line.className = "cartLine";
+        line.dataset.pid = pid;
+
+        line.innerHTML = `
+          <div>
+            <p class="cartName">${p.name}</p>
+            <div class="cartMeta">Wax melts • $5.00 each</div>
+          </div>
+          <div class="cartRight">
+            <div class="cartPrice">${money(qty * PRICE)}</div>
+            <div class="miniQty" aria-label="Cart quantity">
+              <button type="button" data-cart="dec" aria-label="Decrease">−</button>
+              <span>${qty}</span>
+              <button type="button" data-cart="inc" aria-label="Increase">+</button>
+            </div>
+          </div>
+        `;
+
+        cartLines.appendChild(line);
+      });
+
+      const count = cartCount();
+      if (count > 0){
+        cartBadge.style.display = "flex";
+        cartBadge.textContent = String(count);
+      } else {
+        cartBadge.style.display = "none";
+      }
+      cartTotal.textContent = money(cartSubtotal());
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-cart]");
+      if (!btn) return;
+
+      const line = btn.closest(".cartLine");
+      if (!line) return;
+
+      const pid = line.dataset.pid;
+      const act = btn.dataset.cart;
+
+      if (act === "inc") cart[pid] = (cart[pid] || 0) + 1;
+      if (act === "dec") cart[pid] = Math.max(0, (cart[pid] || 0) - 1);
+
+      if (cart[pid] === 0) delete cart[pid];
+
+      saveCart();
+      updateCartUI();
+    });
+
+    function updateCartUI(){
+      renderCart();
+    }
+
+    // ---------- Checkout Modal (Option B) ----------
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    const modalWrap = document.getElementById("modalWrap");
+    const modalClose = document.getElementById("modalClose");
+    const modalOk = document.getElementById("modalOk");
+
+    function openModal(){
+      modalWrap.classList.add("show");
+      modalWrap.setAttribute("aria-hidden", "false");
+    }
+    function closeModal(){
+      modalWrap.classList.remove("show");
+      modalWrap.setAttribute("aria-hidden", "true");
+    }
+
+    checkoutBtn.addEventListener("click", () => {
+      // If cart empty, just open drawer (gentle behavior)
+      if (cartCount() === 0){
+        openDrawer();
+        return;
+      }
+      // Option B popup
+      openModal();
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modalOk.addEventListener("click", closeModal);
+    modalWrap.addEventListener("click", (e) => {
+      if (e.target === modalWrap) closeModal();
+    });
+
+    // Esc closes modal/drawer
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape"){
+        closeModal();
+        closeDrawer();
+      }
+    });
+
+    // ---------- Gentle Parallax (desktop only) ----------
+    (function(){
+      const bg = document.getElementById('bg');
+      const stage = document.getElementById('stage');
+      const isTouch = matchMedia('(hover: none)').matches;
+      if (isTouch) return;
+
+      let tx=0, ty=0, cx=0, cy=0;
+
+      function onMove(e){
+        const r = stage.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        tx = x * 18;
+        ty = y * 12;
+      }
+      function tick(){
+        cx += (tx - cx) * 0.06;
+        cy += (ty - cy) * 0.06;
+        bg.style.setProperty('--px', cx.toFixed(2) + 'px');
+        bg.style.setProperty('--py', cy.toFixed(2) + 'px');
+        requestAnimationFrame(tick);
+      }
+      window.addEventListener('mousemove', onMove, {passive:true});
+      tick();
+    })();
+
+    // ---------- Init ----------
+    renderMenu();
+    updateCartUI();
+  </script>
 </body>
 </html>
