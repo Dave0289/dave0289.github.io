@@ -37,9 +37,10 @@
 
     body{
       margin: 0;
-      background: radial-gradient(1200px 600px at 25% 18%, rgba(214,172,85,.12), rgba(0,0,0,0) 60%),
-                  radial-gradient(900px 520px at 72% 30%, rgba(255,255,255,.05), rgba(0,0,0,0) 58%),
-                  var(--bg);
+      background:
+        radial-gradient(1200px 600px at 25% 18%, rgba(214,172,85,.12), rgba(0,0,0,0) 60%),
+        radial-gradient(900px 520px at 72% 30%, rgba(255,255,255,.05), rgba(0,0,0,0) 58%),
+        var(--bg);
       color: var(--text);
       font-family: var(--sans);
       letter-spacing: .2px;
@@ -65,6 +66,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
+      min-width: 0;
     }
 
     .brand{
@@ -79,15 +81,17 @@
       width: 10px;
       height: 10px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.75), rgba(255,255,255,0) 55%),
-                  radial-gradient(circle at 60% 70%, rgba(214,172,85,.95), rgba(214,172,85,0) 60%),
-                  rgba(214,172,85,.35);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.75), rgba(255,255,255,0) 55%),
+        radial-gradient(circle at 60% 70%, rgba(214,172,85,.95), rgba(214,172,85,0) 60%),
+        rgba(214,172,85,.35);
       box-shadow: 0 0 18px rgba(214,172,85,.25);
       flex: 0 0 auto;
     }
     .brand-title{
       display: grid;
       line-height: 1.05;
+      min-width: 0;
     }
     .brand-title strong{
       font-family: var(--serif);
@@ -101,12 +105,14 @@
       letter-spacing: .28em;
       opacity: .70;
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .nav-links{
       display: flex;
       align-items: center;
       gap: 18px;
+      min-width: 0;
     }
     .nav-links a{
       text-decoration: none;
@@ -144,20 +150,14 @@
       text-transform: uppercase;
       cursor: pointer;
       user-select: none;
+      white-space: nowrap;
     }
     .btn:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
     .btn.gold{ border-color: rgba(214,172,85,.38); box-shadow: 0 0 0 1px rgba(214,172,85,.12) inset; }
-    .icon-btn{
-      width: 40px;
-      padding: 0;
-    }
+    .icon-btn{ width: 40px; padding: 0; }
 
-    /* Hamburger */
-    .nav-toggle{
-      display: none;
-    }
+    .nav-toggle{ display: none; }
 
-    /* Mobile drawer */
     .drawer{
       display: none;
       border-top: 1px solid rgba(255,255,255,.06);
@@ -190,6 +190,7 @@
       max-width: 1120px;
       margin: 0 auto;
       padding: 40px 16px 80px;
+      min-width: 0;
     }
 
     .hero{
@@ -197,6 +198,7 @@
       gap: 16px;
       max-width: 860px;
       padding-top: 18px;
+      min-width: 0;
     }
 
     h1{
@@ -221,6 +223,7 @@
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 6px;
+      min-width: 0;
     }
     .pill{
       border: 1px solid rgba(255,255,255,.12);
@@ -245,7 +248,8 @@
         radial-gradient(900px 420px at 22% 0%, rgba(214,172,85,.14), rgba(0,0,0,0) 60%),
         rgba(255,255,255,.04);
       box-shadow: var(--shadow);
-      overflow: hidden; /* key to stop glow overflow */
+      overflow: hidden; /* key to stop glow overflow / mobile sideways scroll */
+      min-width: 0;
     }
 
     .panel-top{
@@ -253,6 +257,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 0;
       border-bottom: 1px solid rgba(255,255,255,.08);
+      min-width: 0;
     }
 
     .panel-top > div{
@@ -357,6 +362,7 @@
       align-items: center;
       justify-content: flex-end;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .qty{
@@ -367,6 +373,7 @@
       border-radius: 999px;
       overflow: hidden;
       height: 38px;
+      flex: 0 0 auto;
     }
     .qty button{
       width: 38px;
@@ -404,7 +411,7 @@
     }
     .add:hover{ background: rgba(214,172,85,.12); }
 
-    /* Right panel “coming soon” box */
+    /* Right panel */
     .note{
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.18);
@@ -434,18 +441,42 @@
       line-height: 1.6;
     }
 
-    /* Small screens: keep controls from forcing width */
+    .mini-cart{
+      margin-top: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      border-radius: var(--radius2);
+      padding: 14px 16px;
+    }
+    .mini-cart .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin: 8px 0;
+      min-width: 0;
+    }
+    .mini-cart .total{
+      color: rgba(255,255,255,.92);
+      font-weight: 900;
+    }
+    .mini-cart .hint{
+      margin-top: 10px;
+      color: rgba(255,255,255,.50);
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: .02em;
+      text-transform: none;
+    }
+
     @media (max-width: 520px){
-      .card{
-        grid-template-columns: 1fr;
-      }
-      .price{
-        text-align: left;
-        margin-top: 10px;
-      }
-      .controls{
-        justify-content: flex-start;
-      }
+      .card{ grid-template-columns: 1fr; }
+      .price{ text-align: left; margin-top: 10px; }
+      .controls{ justify-content: flex-start; }
     }
   </style>
 </head>
@@ -453,7 +484,7 @@
 <body class="overflow-clip">
   <header class="site-header">
     <div class="nav-wrap">
-      <a class="brand" href="/index.html" aria-label="Common Scents Home">
+      <a class="brand" href="./index.html" aria-label="Common Scents Home">
         <span class="dot" aria-hidden="true"></span>
         <span class="brand-title">
           <strong>COMMON SCENTS</strong>
@@ -462,26 +493,23 @@
       </a>
 
       <nav class="nav-links" aria-label="Primary">
-        <a href="/index.html">Home</a>
-        <a href="/menu.html" style="color: var(--text);">Wax Melts</a>
-        <a href="/menu.html#candles">Candles</a>
+        <a href="./index.html">Home</a>
+        <a href="./menu.html" style="color: var(--text);">Wax Melts</a>
+        <a href="./menu.html#candles">Candles</a>
       </nav>
 
       <div class="nav-actions">
-        <a class="btn gold" href="/index.html#notify">Notify Me</a>
-
-        <!-- Cart icon placeholder (link later when checkout is live) -->
+        <a class="btn gold" href="./index.html#notify">Notify Me</a>
         <a class="btn icon-btn" href="#cart" aria-label="Cart">🛒</a>
-
         <button class="btn nav-toggle" id="navToggle" type="button" aria-label="Menu">☰</button>
       </div>
     </div>
 
     <div class="drawer" id="drawer" aria-label="Mobile Menu">
-      <a href="/index.html">Home</a>
-      <a href="/menu.html">Wax Melts</a>
-      <a href="/menu.html#candles">Candles</a>
-      <a href="/index.html#notify">Notify Me</a>
+      <a href="./index.html">Home</a>
+      <a href="./menu.html">Wax Melts</a>
+      <a href="./menu.html#candles">Candles</a>
+      <a href="./index.html#notify">Notify Me</a>
     </div>
   </header>
 
@@ -529,6 +557,20 @@
             </p>
           </div>
 
+          <div class="mini-cart" id="cart">
+            <div class="row">
+              <span>Items</span>
+              <span id="cartItems">0</span>
+            </div>
+            <div class="row total">
+              <span>Est. Subtotal</span>
+              <span id="cartTotal">$0.00</span>
+            </div>
+            <div class="hint">
+              This is a “build your list” cart for now—online checkout opens soon.
+            </div>
+          </div>
+
           <div class="fine">
             Online ordering will open soon. The cart on this page is for selecting
             quantities and building your list.
@@ -539,32 +581,74 @@
   </main>
 
   <script>
-    // =========================
-    // 1) YOUR OFFICIAL SCENTS (NO INVENTED NAMES)
-    // Paste your poetic blurbs between the quotes.
-    // =========================
     const PRICE = 5.00;
 
+    // Your REAL scents + luxury poetic blurbs (created for your brand voice)
     const SCENTS = [
-      { name: "Apple Harvest", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "Black Raspberry Vanilla", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "Cranberry Woods", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "Fierce AF", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "French Lilac", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "Japanese Cherry Blossom", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "Lavender", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "Peppermint Eucalyptus", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "Sandalwood Element", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." },
-      { name: "White Peach Blossom", blurb: "PASTE THE POETIC BLURB FROM YOUR LABEL HERE." }
+      {
+        name: "Apple Harvest",
+        blurb: "Crisp orchard air and sun-warmed apple skins—finished with a whisper of spice that feels like fall coming home."
+      },
+      {
+        name: "Black Raspberry Vanilla",
+        blurb: "Dark berries and velvet sweetness—rich, smooth, and addictive, like dessert served by candlelight."
+      },
+      {
+        name: "Cranberry Woods",
+        blurb: "Bright cranberry lifted by warm woods and soft resin—clean, confident, and quietly unforgettable."
+      },
+      {
+        name: "Fierce AF",
+        blurb: "Bold, clean, and unapologetic—an elevated edge that fills the room like confidence with the lights down."
+      },
+      {
+        name: "French Lilac",
+        blurb: "A fresh-cut bouquet at golden hour—soft petals, airy sweetness, and a romantic finish that lingers."
+      },
+      {
+        name: "Japanese Cherry Blossom",
+        blurb: "Delicate florals with a silky, serene glow—springtime elegance that makes any room feel refined."
+      },
+      {
+        name: "Lavender",
+        blurb: "Pure lavender, calm and smooth—like clean sheets, quiet evenings, and the exhale you’ve been waiting for."
+      },
+      {
+        name: "Peppermint Eucalyptus",
+        blurb: "Cool mint and clean eucalyptus—bright, breathable, and spa-fresh, like opening the windows after rain."
+      },
+      {
+        name: "Sandalwood Element",
+        blurb: "Creamy woods and soft warmth—grounded, modern, and luxurious, like a perfectly tailored space."
+      },
+      {
+        name: "White Peach Blossom",
+        blurb: "Juicy white peach wrapped in light florals—fresh, soft, and luminous, like sunshine through linen curtains."
+      }
     ];
 
-    // =========================
-    // 2) RENDER SCENTS
-    // =========================
     const list = document.getElementById("scentList");
+    const cartItemsEl = document.getElementById("cartItems");
+    const cartTotalEl = document.getElementById("cartTotal");
+
     const cart = new Map(); // name -> qty
 
     function money(n){ return `$${n.toFixed(2)}`; }
+
+    function updateCartSummary(){
+      let items = 0;
+      for (const v of cart.values()) items += v;
+      cartItemsEl.textContent = items;
+
+      const total = items * PRICE;
+      cartTotalEl.textContent = money(total);
+    }
+
+    function setQty(name, qty){
+      const next = Math.max(0, qty);
+      cart.set(name, next);
+      updateCartSummary();
+    }
 
     function render(){
       list.innerHTML = "";
@@ -585,57 +669,42 @@
         right.innerHTML = `
           <div class="price">${money(PRICE)}</div>
           <div class="controls">
-            <div class="qty" role="group" aria-label="Quantity">
-              <button type="button" aria-label="Decrease">−</button>
-              <span aria-label="Quantity value">${qty}</span>
-              <button type="button" aria-label="Increase">+</button>
+            <div class="qty" role="group" aria-label="Quantity for ${s.name}">
+              <button type="button" data-action="dec" aria-label="Decrease ${s.name}">−</button>
+              <span data-role="qty">${qty}</span>
+              <button type="button" data-action="inc" aria-label="Increase ${s.name}">+</button>
             </div>
-            <button class="add" type="button">Add</button>
+            <button class="add" type="button" data-action="add">Add</button>
           </div>
         `;
 
-        const [decBtn, qtySpan, incBtn] = right.querySelectorAll(".qty button, .qty span, .qty button");
-        const buttons = right.querySelectorAll("button");
-        const dec = buttons[0];
-        const inc = buttons[1]; // careful: qty group contains 2 buttons
-        // Actually query cleanly:
-        const qtyButtons = right.querySelectorAll(".qty button");
-        const decB = qtyButtons[0];
-        const incB = qtyButtons[1];
-        const addB = right.querySelector(".add");
-        const qtyValue = right.querySelector(".qty span");
+        const qtySpan = right.querySelector('[data-role="qty"]');
+        const decBtn = right.querySelector('button[data-action="dec"]');
+        const incBtn = right.querySelector('button[data-action="inc"]');
+        const addBtn = right.querySelector('button[data-action="add"]');
 
-        function setQty(v){
-          const next = Math.max(0, v);
-          cart.set(s.name, next);
-          qtyValue.textContent = next;
+        function syncQty(){
+          qtySpan.textContent = cart.get(s.name) ?? 0;
         }
 
-        decB.addEventListener("click", () => setQty((cart.get(s.name) ?? 0) - 1));
-        incB.addEventListener("click", () => setQty((cart.get(s.name) ?? 0) + 1));
-        addB.addEventListener("click", () => {
-          // For now: just confirms selection locally
-          const current = cart.get(s.name) ?? 0;
-          setQty(current + 1);
-        });
+        decBtn.addEventListener("click", () => { setQty(s.name, (cart.get(s.name) ?? 0) - 1); syncQty(); });
+        incBtn.addEventListener("click", () => { setQty(s.name, (cart.get(s.name) ?? 0) + 1); syncQty(); });
+        addBtn.addEventListener("click", () => { setQty(s.name, (cart.get(s.name) ?? 0) + 1); syncQty(); });
 
         card.appendChild(left);
         card.appendChild(right);
         list.appendChild(card);
       });
+
+      updateCartSummary();
     }
 
     render();
 
-    // =========================
-    // 3) MOBILE NAV TOGGLE
-    // =========================
-    const navToggle = document.getElementById("navToggle");
-    navToggle.addEventListener("click", () => {
+    // Mobile nav toggle
+    document.getElementById("navToggle").addEventListener("click", () => {
       document.body.classList.toggle("nav-open");
     });
-
-    // Close drawer when clicking a drawer link
     document.querySelectorAll(".drawer a").forEach(a => {
       a.addEventListener("click", () => document.body.classList.remove("nav-open"));
     });
