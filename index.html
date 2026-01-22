@@ -191,6 +191,10 @@
       text-transform: uppercase;
       cursor:pointer;
       transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
     .pill:hover{
       transform: translateY(-1px);
@@ -267,6 +271,10 @@
       cursor:pointer;
       transition: transform .2s ease, background .2s ease, border-color .2s ease;
       box-shadow: 0 14px 40px rgba(0,0,0,.25);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
     .btn:hover{
       transform: translateY(-1px);
@@ -509,6 +517,9 @@
 
         <nav aria-label="Primary">
           <ul>
+            <!-- Added Menu link -->
+            <li><a href="menu.html">Menu</a></li>
+
             <li><a href="#about" data-scroll="#about">About</a></li>
             <li><a href="#craft" data-scroll="#craft">Craft</a></li>
             <li><a href="#scents" data-scroll="#scents">Scents</a></li>
@@ -517,6 +528,9 @@
         </nav>
 
         <div class="nav-cta">
+          <!-- Added View Menu pill -->
+          <a class="pill" href="menu.html">View Menu</a>
+
           <button class="pill" type="button" data-scroll="#contact">
             Notify Me
           </button>
@@ -539,11 +553,14 @@
         </p>
 
         <div class="actions reveal d4">
-          <button class="btn" type="button" data-scroll="#scents">
-            Explore the Vision
-          </button>
+          <a class="btn" href="menu.html">View Menu</a>
+
           <button class="btn secondary" type="button" data-scroll="#contact">
             Coming Soon • 2026
+          </button>
+
+          <button class="btn secondary" type="button" data-scroll="#contact">
+            Notify Me
           </button>
         </div>
 
