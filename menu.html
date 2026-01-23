@@ -154,7 +154,30 @@
     }
     .btn:hover{ border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
     .btn.gold{ border-color: rgba(214,172,85,.38); box-shadow: 0 0 0 1px rgba(214,172,85,.12) inset; }
-    .icon-btn{ width: 40px; padding: 0; }
+    .icon-btn{ width: 40px; padding: 0; position: relative; }
+
+    /* Cart badge on icon */
+    .cart-badge{
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 999px;
+      display: none; /* only show when > 0 */
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      color: rgba(0,0,0,.88);
+      background: rgba(214,172,85,.95);
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.28);
+      line-height: 1;
+      pointer-events: none;
+    }
 
     .nav-toggle{ display: none; }
 
@@ -697,7 +720,13 @@
 
       <div class="nav-actions">
         <a class="btn gold" href="./index.html#notify">Notify Me</a>
-        <button class="btn icon-btn" id="openCartBtn" type="button" aria-label="Cart">🛒</button>
+
+        <!-- Cart icon with badge -->
+        <button class="btn icon-btn" id="openCartBtn" type="button" aria-label="Cart">
+          🛒
+          <span class="cart-badge" id="cartBadge" aria-hidden="true">0</span>
+        </button>
+
         <button class="btn nav-toggle" id="navToggle" type="button" aria-label="Menu">☰</button>
       </div>
     </div>
@@ -830,8 +859,9 @@
         </div>
 
         <div class="cta-row">
+          <button class="cta secondary" id="continueBtn" type="button">Go Back</button>
           <button class="cta secondary" id="copyJsonBtn" type="button">Copy JSON</button>
-          <button class="cta" id="placeOrderBtn" type="button">Place Order</button>
+          <button class="cta" id="placeOrderBtn" type="button">Checkout</button>
         </div>
 
         <div class="status" id="orderStatus">Orders send by email (no payment yet).</div>
@@ -901,9 +931,12 @@
     const custPhoneEl = document.getElementById("custPhone");
     const custNotesEl = document.getElementById("custNotes");
 
+    const continueBtn = document.getElementById("continueBtn");
     const copyJsonBtn = document.getElementById("copyJsonBtn");
     const placeOrderBtn = document.getElementById("placeOrderBtn");
     const orderStatusEl = document.getElementById("orderStatus");
+
+    const cartBadgeEl = document.getElementById("cartBadge");
 
     /***********************
      * UTILS
@@ -1038,6 +1071,17 @@
       };
     }
 
+    function updateCartBadge(items){
+      if(!cartBadgeEl) return;
+      if(items > 0){
+        cartBadgeEl.textContent = String(items);
+        cartBadgeEl.style.display = "inline-flex";
+      } else {
+        cartBadgeEl.textContent = "0";
+        cartBadgeEl.style.display = "none";
+      }
+    }
+
     function updateCartSummary(){
       const { items, subtotal, shipping, total } = getTotals();
 
@@ -1048,6 +1092,8 @@
       drawerSubtotalEl.textContent = money(subtotal);
       drawerShippingEl.textContent = money(shipping);
       drawerTotalEl.textContent = money(total);
+
+      updateCartBadge(items);
     }
 
     /***********************
@@ -1139,7 +1185,7 @@
         addBtn.addEventListener("click", () => {
           addToCart(s);
           syncQty();
-          openCart();
+          // NOTE: do not auto-open cart; user can tap 🛒 to view
         });
 
         card.appendChild(left);
@@ -1183,11 +1229,13 @@
         row.querySelector('[data-act="dec"]').addEventListener("click", () => {
           setQty(key, it.qty - 1);
           qSpan.textContent = cart.get(key)?.qty ?? 0;
+          renderMenu(); // keep menu qty pills in sync
         });
 
         row.querySelector('[data-act="inc"]').addEventListener("click", () => {
           setQty(key, it.qty + 1);
           qSpan.textContent = cart.get(key)?.qty ?? (it.qty + 1);
+          renderMenu(); // keep menu qty pills in sync
         });
 
         cartListEl.appendChild(row);
@@ -1361,6 +1409,7 @@
       if(e.key === "Escape") closeCart();
     });
 
+    continueBtn.addEventListener("click", closeCart);
     copyJsonBtn.addEventListener("click", copyOrderJson);
     placeOrderBtn.addEventListener("click", sendOrder);
 
