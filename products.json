@@ -1,0 +1,66 @@
+{
+  "currency": "USD",
+  "wax_melts": {
+    "label": "Wax Melts (6 per clamshell, 12.6 oz)",
+    "unit_price": 5.00
+  },
+  "shipping": {
+    "label": "Shipping & Handling",
+    "mode": "flat_plus_per_item",
+    "base": 6.95,
+    "per_item": 0.75,
+    "free_over": 75.00
+  },
+  "scents": [
+    {
+      "id": "apple-harvest",
+      "name": "Apple Harvest",
+      "blurb": "Crisp orchard air and sun-warmed apple skins—finished with a whisper of spice that feels like fall coming home."
+    },
+    {
+      "id": "black-raspberry-vanilla",
+      "name": "Black Raspberry Vanilla",
+      "blurb": "Dark berries and velvet sweetness—rich, smooth, and addictive, like dessert served by candlelight."
+    },
+    {
+      "id": "cranberry-woods",
+      "name": "Cranberry Woods",
+      "blurb": "Bright cranberry lifted by warm woods and soft resin—clean, confident, and quietly unforgettable."
+    },
+    {
+      "id": "fierce-af",
+      "name": "Fierce AF",
+      "blurb": "Bold, clean, and unapologetic—an elevated edge that fills the room like confidence with the lights down."
+    },
+    {
+      "id": "french-lilac",
+      "name": "French Lilac",
+      "blurb": "A fresh-cut bouquet at golden hour—soft petals, airy sweetness, and a romantic finish that lingers."
+    },
+    {
+      "id": "japanese-cherry-blossom",
+      "name": "Japanese Cherry Blossom",
+      "blurb": "Delicate florals with a silky, serene glow—springtime elegance that makes any room feel refined."
+    },
+    {
+      "id": "lavender",
+      "name": "Lavender",
+      "blurb": "Pure lavender, calm and smooth—like clean sheets, quiet evenings, and the exhale you’ve been waiting for."
+    },
+    {
+      "id": "peppermint-eucalyptus",
+      "name": "Peppermint Eucalyptus",
+      "blurb": "Cool mint and clean eucalyptus—bright, breathable, and spa-fresh, like opening the windows after rain."
+    },
+    {
+      "id": "sandalwood-element",
+      "name": "Sandalwood Element",
+      "blurb": "Creamy woods and soft warmth—grounded, modern, and luxurious, like a perfectly tailored space."
+    },
+    {
+      "id": "white-peach-blossom",
+      "name": "White Peach Blossom",
+      "blurb": "Juicy white peach wrapped in light florals—fresh, soft, and luminous, like sunshine through linen curtains."
+    }
+  ]
+}
