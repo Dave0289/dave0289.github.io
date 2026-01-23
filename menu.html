@@ -480,7 +480,7 @@
     }
 
     /* =========================
-       CART DRAWER (REAL)
+       CART DRAWER
        ========================= */
     .cart-overlay{
       position: fixed;
@@ -721,7 +721,7 @@
       <div class="pills" aria-label="Specs">
         <span class="pill">Wax melts • 6 per clamshell</span>
         <span class="pill">Total weight • 12.6 oz</span>
-        <span class="pill">$5.00 each • + shipping & handling</span>
+        <span class="pill" id="pricePill">$5.00 each • + shipping & handling</span>
       </div>
     </section>
 
@@ -729,7 +729,7 @@
       <div class="panel-top">
         <div>
           <p class="panel-title">WAX MELTS</p>
-          <p class="panel-meta">$5.00 / clamshell • 6 melts • 12.6 oz</p>
+          <p class="panel-meta" id="panelMeta">$5.00 / clamshell • 6 melts • 12.6 oz</p>
         </div>
         <div id="candles">
           <p class="panel-title">CANDLES</p>
@@ -800,6 +800,14 @@
       </div>
       <div class="cart-summary">
         <span>Subtotal</span>
+        <b id="drawerSubtotal">$0.00</b>
+      </div>
+      <div class="cart-summary">
+        <span>Shipping</span>
+        <b id="drawerShipping">$0.00</b>
+      </div>
+      <div class="cart-summary">
+        <span>Total</span>
         <b id="drawerTotal">$0.00</b>
       </div>
 
@@ -832,48 +840,37 @@
   </aside>
 
   <!-- EmailJS (optional) -->
-  <!-- If you configure EmailJS, fill in IDs in CONFIG below. -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
   <script>
     /***********************
      * CONFIG
      ***********************/
-    const PRICE = 5.00;
-
     // EmailJS: set these when you’re ready (works on GitHub Pages)
     const EMAILJS = {
-      enabled: false,           // set true after you fill in below
-      publicKey: "",            // e.g. "xXxXxXxX"
-      serviceId: "",            // e.g. "service_abcd123"
-      templateId: "",           // e.g. "template_order123"
-      toEmail: "commonscentsuse@yahoo.com" // where YOU want the orders to go
+      enabled: false,
+      publicKey: "",
+      serviceId: "",
+      templateId: "",
+      toEmail: "commonscentsusa@yahoo.com" // ✅ orders go here
     };
 
-    // LocalStorage key
     const CART_KEY = "commonScentsCart_v1";
 
-    /***********************
-     * FALLBACK SCENTS (used ONLY if scents.json not found)
-     ***********************/
-    const FALLBACK_SCENTS = [
-      { name: "Apple Harvest", blurb: "Crisp orchard air and sun-warmed apple skins—finished with a whisper of spice that feels like fall coming home." },
-      { name: "Black Raspberry Vanilla", blurb: "Dark berries and velvet sweetness—rich, smooth, and addictive, like dessert served by candlelight." },
-      { name: "Cranberry Woods", blurb: "Bright cranberry lifted by warm woods and soft resin—clean, confident, and quietly unforgettable." },
-      { name: "Fierce AF", blurb: "Bold, clean, and unapologetic—an elevated edge that fills the room like confidence with the lights down." },
-      { name: "French Lilac", blurb: "A fresh-cut bouquet at golden hour—soft petals, airy sweetness, and a romantic finish that lingers." },
-      { name: "Japanese Cherry Blossom", blurb: "Delicate florals with a silky, serene glow—springtime elegance that makes any room feel refined." },
-      { name: "Lavender", blurb: "Pure lavender, calm and smooth—like clean sheets, quiet evenings, and the exhale you’ve been waiting for." },
-      { name: "Peppermint Eucalyptus", blurb: "Cool mint and clean eucalyptus—bright, breathable, and spa-fresh, like opening the windows after rain." },
-      { name: "Sandalwood Element", blurb: "Creamy woods and soft warmth—grounded, modern, and luxurious, like a perfectly tailored space." },
-      { name: "White Peach Blossom", blurb: "Juicy white peach wrapped in light florals—fresh, soft, and luminous, like sunshine through linen curtains." }
-    ];
+    // Loaded from products.json
+    let CURRENCY = "USD";
+    let UNIT_PRICE = 5.00;
+    let SHIPPING = {
+      mode: "flat_plus_per_item",
+      base: 6.95,
+      per_item: 0.75,
+      free_over: 75.00,
+      label: "Shipping & Handling"
+    };
 
-    /***********************
-     * STATE
-     ***********************/
     let SCENTS = [];
-    // cart map: skuOrName -> { sku, name, price, qty }
+
+    // cart map: key -> { sku, name, price, qty }
     const cart = new Map();
 
     /***********************
@@ -883,6 +880,14 @@
     const cartItemsEl = document.getElementById("cartItems");
     const cartTotalEl = document.getElementById("cartTotal");
 
+    const drawerItemsEl = document.getElementById("drawerItems");
+    const drawerSubtotalEl = document.getElementById("drawerSubtotal");
+    const drawerShippingEl = document.getElementById("drawerShipping");
+    const drawerTotalEl = document.getElementById("drawerTotal");
+
+    const pricePillEl = document.getElementById("pricePill");
+    const panelMetaEl = document.getElementById("panelMeta");
+
     const openCartBtn = document.getElementById("openCartBtn");
     const closeCartBtn = document.getElementById("closeCartBtn");
     const cartOverlay = document.getElementById("cartOverlay");
@@ -890,8 +895,6 @@
 
     const cartListEl = document.getElementById("cartList");
     const emptyMsgEl = document.getElementById("emptyMsg");
-    const drawerItemsEl = document.getElementById("drawerItems");
-    const drawerTotalEl = document.getElementById("drawerTotal");
 
     const custNameEl = document.getElementById("custName");
     const custEmailEl = document.getElementById("custEmail");
@@ -905,18 +908,17 @@
     /***********************
      * UTILS
      ***********************/
-    function money(n){ return `$${n.toFixed(2)}`; }
+    function money(n){ return `$${Number(n || 0).toFixed(2)}`; }
 
     function safeIdFromName(name){
       return String(name || "")
         .trim()
-        .toUpperCase()
-        .replace(/[^A-Z0-9]+/g, "-")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
     }
 
     function nowISO(){
-      // local time ISO with offset
       const d = new Date();
       const pad = (n) => String(n).padStart(2,"0");
       const tz = -d.getTimezoneOffset();
@@ -927,7 +929,6 @@
     }
 
     function genOrderId(){
-      // Simple, readable, good enough for email orders
       const d = new Date();
       const pad = (n) => String(n).padStart(2,"0");
       const stamp = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
@@ -939,6 +940,41 @@
       orderStatusEl.classList.remove("ok","err");
       if (kind) orderStatusEl.classList.add(kind);
       orderStatusEl.textContent = msg;
+    }
+
+    /***********************
+     * PRODUCTS.JSON LOADING
+     ***********************/
+    function normalizeScent(obj){
+      const name = obj?.name || "";
+      const blurb = obj?.blurb || "";
+      const sku = obj?.id || obj?.sku || safeIdFromName(name);
+      return { sku, name, blurb, price: UNIT_PRICE };
+    }
+
+    async function loadProducts(){
+      const res = await fetch("./products.json", { cache: "no-store" });
+      if(!res.ok) throw new Error("products.json not found");
+      const data = await res.json();
+
+      CURRENCY = data.currency || "USD";
+      UNIT_PRICE = Number(data?.wax_melts?.unit_price ?? 5.00);
+
+      const ship = data.shipping || {};
+      SHIPPING = {
+        label: ship.label || "Shipping & Handling",
+        mode: ship.mode || "flat_plus_per_item",
+        base: Number(ship.base ?? 0),
+        per_item: Number(ship.per_item ?? 0),
+        free_over: Number(ship.free_over ?? Infinity)
+      };
+
+      const arr = Array.isArray(data.scents) ? data.scents : [];
+      SCENTS = arr.map(normalizeScent).filter(s => s.name);
+
+      // Update UI labels to match JSON
+      pricePillEl.textContent = `${money(UNIT_PRICE)} each • + shipping & handling`;
+      panelMetaEl.textContent = `${money(UNIT_PRICE)} / clamshell • 6 melts • 12.6 oz`;
     }
 
     /***********************
@@ -963,17 +999,15 @@
           cart.set(key, {
             sku: item.sku || safeIdFromName(item.name),
             name: item.name || "Item",
-            price: Number(item.price ?? PRICE),
+            price: Number(item.price ?? UNIT_PRICE),
             qty: Math.max(0, Number(item.qty ?? 0))
           });
         });
-      }catch(e){
-        // ignore
-      }
+      }catch(e){}
     }
 
     /***********************
-     * CART OPERATIONS
+     * SHIPPING + TOTALS
      ***********************/
     function getTotals(){
       let items = 0;
@@ -982,17 +1016,43 @@
         items += it.qty;
         subtotal += it.qty * it.price;
       }
-      return { items, subtotal };
+
+      let shipping = 0;
+      if (items > 0){
+        if (Number.isFinite(SHIPPING.free_over) && subtotal >= SHIPPING.free_over){
+          shipping = 0;
+        } else if (SHIPPING.mode === "flat_plus_per_item"){
+          shipping = SHIPPING.base + (SHIPPING.per_item * items);
+        } else {
+          // fallback: flat base
+          shipping = SHIPPING.base || 0;
+        }
+      }
+
+      const total = subtotal + shipping;
+      return {
+        items,
+        subtotal: Number(subtotal.toFixed(2)),
+        shipping: Number(shipping.toFixed(2)),
+        total: Number(total.toFixed(2))
+      };
     }
 
     function updateCartSummary(){
-      const { items, subtotal } = getTotals();
+      const { items, subtotal, shipping, total } = getTotals();
+
       cartItemsEl.textContent = items;
       cartTotalEl.textContent = money(subtotal);
+
       drawerItemsEl.textContent = items;
-      drawerTotalEl.textContent = money(subtotal);
+      drawerSubtotalEl.textContent = money(subtotal);
+      drawerShippingEl.textContent = money(shipping);
+      drawerTotalEl.textContent = money(total);
     }
 
+    /***********************
+     * CART OPERATIONS
+     ***********************/
     function setQty(key, qty){
       const it = cart.get(key);
       if(!it) return;
@@ -1012,43 +1072,13 @@
         cart.set(key, {
           sku: scent.sku || safeIdFromName(scent.name),
           name: scent.name,
-          price: Number(scent.price ?? PRICE),
+          price: Number(scent.price ?? UNIT_PRICE),
           qty: 1
         });
       }
       saveCart();
       updateCartSummary();
       renderCartDrawer();
-    }
-
-    /***********************
-     * SCENTS LOADING
-     ***********************/
-    function normalizeScent(obj){
-      // Accepts multiple JSON shapes; we normalize to:
-      // { sku, name, blurb, price }
-      // If your JSON is different, send it next and I’ll map it perfectly.
-      const name = obj.name || obj.scent || obj.title || "";
-      const blurb = obj.blurb || obj.description || obj.desc || "";
-      const sku = obj.sku || obj.id || (name ? safeIdFromName(name) : "");
-      const price = (obj.price != null) ? Number(obj.price) : PRICE;
-      return { sku, name, blurb, price };
-    }
-
-    async function loadScents(){
-      try{
-        const res = await fetch("./scents.json", { cache: "no-store" });
-        if(!res.ok) throw new Error("no scents.json");
-        const data = await res.json();
-
-        // allow either array, or {scents:[...]}
-        const arr = Array.isArray(data) ? data : (Array.isArray(data.scents) ? data.scents : null);
-        if(!arr) throw new Error("invalid scents.json");
-
-        SCENTS = arr.map(normalizeScent).filter(s => s.name);
-      }catch(err){
-        SCENTS = FALLBACK_SCENTS.map(normalizeScent);
-      }
     }
 
     /***********************
@@ -1072,7 +1102,7 @@
 
         const right = document.createElement("div");
         right.innerHTML = `
-          <div class="price">${money(s.price ?? PRICE)}</div>
+          <div class="price">${money(s.price ?? UNIT_PRICE)}</div>
           <div class="controls">
             <div class="qty" role="group" aria-label="Quantity for ${s.name}">
               <button type="button" data-action="dec" aria-label="Decrease ${s.name}">−</button>
@@ -1088,26 +1118,20 @@
         const incBtn = right.querySelector('button[data-action="inc"]');
         const addBtn = right.querySelector('button[data-action="add"]');
 
-        function syncQty(){
-          qtySpan.textContent = cart.get(key)?.qty ?? 0;
-        }
+        function syncQty(){ qtySpan.textContent = cart.get(key)?.qty ?? 0; }
 
         decBtn.addEventListener("click", () => {
           const current = cart.get(key)?.qty ?? 0;
           if(current <= 0) return;
-          // We keep item present until 0, then remove
-          if(!cart.has(key)){
-            cart.set(key, { sku: s.sku, name: s.name, price: s.price ?? PRICE, qty: 0 });
-          }
           setQty(key, current - 1);
           syncQty();
         });
 
         incBtn.addEventListener("click", () => {
-          if(!cart.has(key)){
-            cart.set(key, { sku: s.sku, name: s.name, price: s.price ?? PRICE, qty: 0 });
-          }
           const current = cart.get(key)?.qty ?? 0;
+          if(!cart.has(key)){
+            cart.set(key, { sku: s.sku, name: s.name, price: s.price ?? UNIT_PRICE, qty: 0 });
+          }
           setQty(key, current + 1);
           syncQty();
         });
@@ -1115,7 +1139,6 @@
         addBtn.addEventListener("click", () => {
           addToCart(s);
           syncQty();
-          // optional: open cart to confirm add
           openCart();
         });
 
@@ -1154,14 +1177,17 @@
           </div>
         `;
 
+        const key = it.sku || it.name;
         const qSpan = row.querySelector('[data-role="q"]');
+
         row.querySelector('[data-act="dec"]').addEventListener("click", () => {
-          setQty(it.sku || it.name, it.qty - 1);
-          qSpan.textContent = cart.get(it.sku || it.name)?.qty ?? 0;
+          setQty(key, it.qty - 1);
+          qSpan.textContent = cart.get(key)?.qty ?? 0;
         });
+
         row.querySelector('[data-act="inc"]').addEventListener("click", () => {
-          setQty(it.sku || it.name, it.qty + 1);
-          qSpan.textContent = cart.get(it.sku || it.name)?.qty ?? (it.qty + 1);
+          setQty(key, it.qty + 1);
+          qSpan.textContent = cart.get(key)?.qty ?? (it.qty + 1);
         });
 
         cartListEl.appendChild(row);
@@ -1174,19 +1200,21 @@
      * ORDER JSON
      ***********************/
     function buildOrder(){
-      const { items, subtotal } = getTotals();
+      const { items, subtotal, shipping, total } = getTotals();
+
       const order = {
         order_id: genOrderId(),
         timestamp: nowISO(),
         brand: "Common Scents",
         channel: "website",
+        currency: CURRENCY,
+        to_email: EMAILJS.toEmail,
         customer: {
           name: (custNameEl.value || "").trim(),
           email: (custEmailEl.value || "").trim(),
           phone: (custPhoneEl.value || "").trim()
         },
         notes: (custNotesEl.value || "").trim(),
-        currency: "USD",
         items: Array.from(cart.values())
           .filter(it => it.qty > 0)
           .map(it => ({
@@ -1196,10 +1224,17 @@
             price: Number(it.price),
             line_total: Number((it.qty * it.price).toFixed(2))
           })),
-        subtotal: Number(subtotal.toFixed(2)),
+        subtotal,
+        shipping: {
+          label: SHIPPING.label,
+          mode: SHIPPING.mode,
+          base: SHIPPING.base,
+          per_item: SHIPPING.per_item,
+          free_over: SHIPPING.free_over,
+          amount: shipping
+        },
         tax: 0.00,
-        shipping: 0.00,
-        total: Number(subtotal.toFixed(2))
+        total
       };
 
       return { order, itemsCount: items };
@@ -1217,7 +1252,7 @@
     }
 
     /***********************
-     * EMAIL SEND (EmailJS or fallback)
+     * EMAIL SEND (EmailJS or mailto fallback)
      ***********************/
     async function sendOrder(){
       const { order, itemsCount } = buildOrder();
@@ -1239,7 +1274,7 @@
         .map(i => `${i.qty} x ${i.name} (${i.sku}) = $${i.line_total.toFixed(2)}`)
         .join("\n");
 
-      // If EmailJS configured:
+      // EmailJS path (optional)
       if(EMAILJS.enabled && window.emailjs){
         try{
           emailjs.init({ publicKey: EMAILJS.publicKey });
@@ -1254,13 +1289,14 @@
             timestamp: order.timestamp,
             items: prettyList,
             subtotal: `$${order.subtotal.toFixed(2)}`,
+            shipping: `$${order.shipping.amount.toFixed(2)}`,
+            total: `$${order.total.toFixed(2)}`,
             order_json: JSON.stringify(order, null, 2)
           };
 
           await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, params);
-          setStatus("Order sent! Check your email confirmation.", "ok");
+          setStatus("Order sent! We received it.", "ok");
 
-          // Clear cart after successful send
           cart.clear();
           saveCart();
           updateCartSummary();
@@ -1269,16 +1305,16 @@
           return;
 
         }catch(err){
-          setStatus("Email send failed (EmailJS). Using fallback email method…", "err");
-          // continue to fallback below
+          setStatus("EmailJS failed. Opening fallback email…", "err");
+          // continue to fallback
         }
       }
 
-      // Fallback: copy JSON + mailto
+      // Fallback: mailto (opens user's email client)
       const jsonTxt = JSON.stringify(order, null, 2);
       try{ await navigator.clipboard.writeText(jsonTxt); }catch(e){}
 
-      const subject = encodeURIComponent(`Common Scents Order ${order.order_id}`);
+      const subject = encodeURIComponent(`Common Scents Order — ${order.customer.name} — ${order.order_id}`);
       const body = encodeURIComponent(
         `NEW ORDER\n\n` +
         `Order ID: ${order.order_id}\n` +
@@ -1287,16 +1323,17 @@
         `Email: ${order.customer.email}\n` +
         `Phone: ${order.customer.phone || ""}\n\n` +
         `Items:\n${prettyList}\n\n` +
-        `Subtotal: $${order.subtotal.toFixed(2)}\n\n` +
+        `Subtotal: $${order.subtotal.toFixed(2)}\n` +
+        `Shipping: $${order.shipping.amount.toFixed(2)}\n` +
+        `Total: $${order.total.toFixed(2)}\n\n` +
         `Notes:\n${order.notes || ""}\n\n` +
         `JSON (also copied to clipboard if allowed):\n\n${jsonTxt}`
       );
 
-      // Sends to YOUR address in EMAILJS.toEmail, or fallback to a hardcoded safe default
-      const to = encodeURIComponent(EMAILJS.toEmail || "commonscentsuse@gmail.com");
+      const to = encodeURIComponent(EMAILJS.toEmail || "commonscentsusa@yahoo.com");
       window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
 
-      setStatus("Fallback email opened. JSON copied to clipboard (if allowed).", "ok");
+      setStatus("Email draft opened. JSON copied to clipboard (if allowed).", "ok");
     }
 
     /***********************
@@ -1320,7 +1357,6 @@
     closeCartBtn.addEventListener("click", closeCart);
     cartOverlay.addEventListener("click", closeCart);
 
-    // ESC to close
     window.addEventListener("keydown", (e) => {
       if(e.key === "Escape") closeCart();
     });
@@ -1332,7 +1368,6 @@
      * INIT
      ***********************/
     (async function init(){
-      // mobile nav toggle
       document.getElementById("navToggle").addEventListener("click", () => {
         document.body.classList.toggle("nav-open");
       });
@@ -1341,10 +1376,29 @@
       });
 
       loadCart();
-      await loadScents();
+
+      try{
+        await loadProducts();
+      }catch(e){
+        // If products.json missing, still run but show an error.
+        setStatus("Could not load products.json. Check file name/location in repo.", "err");
+        SCENTS = [];
+      }
+
+      // If products.json loaded but cart items were stored with old prices, update them to current UNIT_PRICE
+      for (const [k, it] of cart.entries()){
+        it.price = Number(UNIT_PRICE);
+        cart.set(k, it);
+      }
+      saveCart();
+
       renderMenu();
       renderCartDrawer();
-      setStatus("Orders send by email (no payment yet).");
+      updateCartSummary();
+
+      if (SCENTS.length){
+        setStatus("Orders send by email (no payment yet).");
+      }
     })();
   </script>
 </body>
