@@ -7,7 +7,7 @@
   "shipping": {
     "label": "Shipping & Handling",
     "mode": "flat_plus_per_item",
-    "base": 6.95,
+    "base": 1.95,
     "per_item": 0.75,
     "free_over": 75.00
   },
