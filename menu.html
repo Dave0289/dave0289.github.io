@@ -248,7 +248,7 @@
         radial-gradient(900px 420px at 22% 0%, rgba(214,172,85,.14), rgba(0,0,0,0) 60%),
         rgba(255,255,255,.04);
       box-shadow: var(--shadow);
-      overflow: hidden; /* key to stop glow overflow / mobile sideways scroll */
+      overflow: hidden;
       min-width: 0;
     }
 
@@ -478,6 +478,203 @@
       .price{ text-align: left; margin-top: 10px; }
       .controls{ justify-content: flex-start; }
     }
+
+    /* =========================
+       CART DRAWER (REAL)
+       ========================= */
+    .cart-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: none;
+      z-index: 2000;
+    }
+    body.cart-open .cart-overlay{ display: block; }
+
+    .cart-drawer{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: min(420px, 92vw);
+      background: rgba(7,6,5,.96);
+      backdrop-filter: blur(14px);
+      border-left: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      transform: translateX(110%);
+      transition: transform .24s ease;
+      z-index: 2100;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-width: 0;
+    }
+    body.cart-open .cart-drawer{ transform: translateX(0); }
+
+    .cart-head{
+      padding: 16px 16px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      min-width: 0;
+    }
+    .cart-head h2{
+      margin: 0;
+      font-family: var(--serif);
+      letter-spacing: .20em;
+      text-transform: uppercase;
+      font-weight: 500;
+      font-size: 16px;
+    }
+    .cart-close{
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.88);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .cart-body{
+      overflow: auto;
+      padding: 14px 16px 0;
+      min-width: 0;
+    }
+
+    .cart-item{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding: 12px 12px;
+      margin: 10px 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      min-width: 0;
+    }
+    .cart-item strong{
+      display:block;
+      font-family: var(--serif);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(255,255,255,.90);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cart-item small{
+      display:block;
+      margin-top: 6px;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+      letter-spacing: .02em;
+      text-transform: none;
+      line-height: 1.4;
+    }
+    .cart-item .line{
+      color: var(--gold);
+      font-weight: 800;
+      letter-spacing: .12em;
+      font-size: 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .cart-foot{
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 12px 16px 16px;
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+    .cart-summary{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      color: rgba(255,255,255,.80);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-size: 11px;
+      min-width: 0;
+    }
+    .cart-summary b{ color: rgba(255,255,255,.92); }
+
+    .checkout{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .field{
+      display:grid;
+      gap: 6px;
+    }
+    .field label{
+      color: rgba(255,255,255,.60);
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .field input, .field textarea{
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: rgba(255,255,255,.88);
+      padding: 10px 12px;
+      font-family: var(--sans);
+      font-size: 13px;
+      outline: none;
+    }
+    .field textarea{ min-height: 70px; resize: vertical; }
+
+    .cta-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .cta{
+      flex: 1 1 160px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(214,172,85,.38);
+      background: rgba(214,172,85,.10);
+      color: rgba(255,255,255,.92);
+      font-weight: 900;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .cta:hover{ background: rgba(214,172,85,.14); }
+
+    .cta.secondary{
+      border-color: rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.86);
+      font-weight: 800;
+    }
+
+    .status{
+      color: rgba(255,255,255,.62);
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: .02em;
+      text-transform: none;
+    }
+    .status.ok{ color: rgba(214,172,85,.95); }
+    .status.err{ color: rgba(255,120,120,.92); }
   </style>
 </head>
 
@@ -500,7 +697,7 @@
 
       <div class="nav-actions">
         <a class="btn gold" href="./index.html#notify">Notify Me</a>
-        <a class="btn icon-btn" href="#cart" aria-label="Cart">🛒</a>
+        <button class="btn icon-btn" id="openCartBtn" type="button" aria-label="Cart">🛒</button>
         <button class="btn nav-toggle" id="navToggle" type="button" aria-label="Menu">☰</button>
       </div>
     </div>
@@ -580,80 +777,288 @@
     </section>
   </main>
 
+  <!-- CART OVERLAY + DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Cart Drawer" aria-hidden="true">
+    <div class="cart-head">
+      <h2>Your Cart</h2>
+      <button class="cart-close" id="closeCartBtn" type="button" aria-label="Close cart">✕</button>
+    </div>
+
+    <div class="cart-body">
+      <div id="cartList"></div>
+      <div class="status" id="emptyMsg" style="margin:12px 0; display:none;">
+        Your cart is empty. Add a few scents from the menu.
+      </div>
+    </div>
+
+    <div class="cart-foot">
+      <div class="cart-summary">
+        <span>Items</span>
+        <b id="drawerItems">0</b>
+      </div>
+      <div class="cart-summary">
+        <span>Subtotal</span>
+        <b id="drawerTotal">$0.00</b>
+      </div>
+
+      <div class="checkout">
+        <div class="field">
+          <label for="custName">Name</label>
+          <input id="custName" type="text" autocomplete="name" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label for="custEmail">Email</label>
+          <input id="custEmail" type="email" autocomplete="email" placeholder="you@email.com" />
+        </div>
+        <div class="field">
+          <label for="custPhone">Phone (optional)</label>
+          <input id="custPhone" type="tel" autocomplete="tel" placeholder="(555) 123-4567" />
+        </div>
+        <div class="field">
+          <label for="custNotes">Notes (pickup/shipping, etc.)</label>
+          <textarea id="custNotes" placeholder="Pickup at market / shipping address / anything you want us to know"></textarea>
+        </div>
+
+        <div class="cta-row">
+          <button class="cta secondary" id="copyJsonBtn" type="button">Copy JSON</button>
+          <button class="cta" id="placeOrderBtn" type="button">Place Order</button>
+        </div>
+
+        <div class="status" id="orderStatus">Orders send by email (no payment yet).</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- EmailJS (optional) -->
+  <!-- If you configure EmailJS, fill in IDs in CONFIG below. -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <script>
+    /***********************
+     * CONFIG
+     ***********************/
     const PRICE = 5.00;
 
-    // Your REAL scents + luxury poetic blurbs (created for your brand voice)
-    const SCENTS = [
-      {
-        name: "Apple Harvest",
-        blurb: "Crisp orchard air and sun-warmed apple skins—finished with a whisper of spice that feels like fall coming home."
-      },
-      {
-        name: "Black Raspberry Vanilla",
-        blurb: "Dark berries and velvet sweetness—rich, smooth, and addictive, like dessert served by candlelight."
-      },
-      {
-        name: "Cranberry Woods",
-        blurb: "Bright cranberry lifted by warm woods and soft resin—clean, confident, and quietly unforgettable."
-      },
-      {
-        name: "Fierce AF",
-        blurb: "Bold, clean, and unapologetic—an elevated edge that fills the room like confidence with the lights down."
-      },
-      {
-        name: "French Lilac",
-        blurb: "A fresh-cut bouquet at golden hour—soft petals, airy sweetness, and a romantic finish that lingers."
-      },
-      {
-        name: "Japanese Cherry Blossom",
-        blurb: "Delicate florals with a silky, serene glow—springtime elegance that makes any room feel refined."
-      },
-      {
-        name: "Lavender",
-        blurb: "Pure lavender, calm and smooth—like clean sheets, quiet evenings, and the exhale you’ve been waiting for."
-      },
-      {
-        name: "Peppermint Eucalyptus",
-        blurb: "Cool mint and clean eucalyptus—bright, breathable, and spa-fresh, like opening the windows after rain."
-      },
-      {
-        name: "Sandalwood Element",
-        blurb: "Creamy woods and soft warmth—grounded, modern, and luxurious, like a perfectly tailored space."
-      },
-      {
-        name: "White Peach Blossom",
-        blurb: "Juicy white peach wrapped in light florals—fresh, soft, and luminous, like sunshine through linen curtains."
-      }
+    // EmailJS: set these when you’re ready (works on GitHub Pages)
+    const EMAILJS = {
+      enabled: false,           // set true after you fill in below
+      publicKey: "",            // e.g. "xXxXxXxX"
+      serviceId: "",            // e.g. "service_abcd123"
+      templateId: "",           // e.g. "template_order123"
+      toEmail: "commonscentsuse@gmail.com" // where YOU want the orders to go
+    };
+
+    // LocalStorage key
+    const CART_KEY = "commonScentsCart_v1";
+
+    /***********************
+     * FALLBACK SCENTS (used ONLY if scents.json not found)
+     ***********************/
+    const FALLBACK_SCENTS = [
+      { name: "Apple Harvest", blurb: "Crisp orchard air and sun-warmed apple skins—finished with a whisper of spice that feels like fall coming home." },
+      { name: "Black Raspberry Vanilla", blurb: "Dark berries and velvet sweetness—rich, smooth, and addictive, like dessert served by candlelight." },
+      { name: "Cranberry Woods", blurb: "Bright cranberry lifted by warm woods and soft resin—clean, confident, and quietly unforgettable." },
+      { name: "Fierce AF", blurb: "Bold, clean, and unapologetic—an elevated edge that fills the room like confidence with the lights down." },
+      { name: "French Lilac", blurb: "A fresh-cut bouquet at golden hour—soft petals, airy sweetness, and a romantic finish that lingers." },
+      { name: "Japanese Cherry Blossom", blurb: "Delicate florals with a silky, serene glow—springtime elegance that makes any room feel refined." },
+      { name: "Lavender", blurb: "Pure lavender, calm and smooth—like clean sheets, quiet evenings, and the exhale you’ve been waiting for." },
+      { name: "Peppermint Eucalyptus", blurb: "Cool mint and clean eucalyptus—bright, breathable, and spa-fresh, like opening the windows after rain." },
+      { name: "Sandalwood Element", blurb: "Creamy woods and soft warmth—grounded, modern, and luxurious, like a perfectly tailored space." },
+      { name: "White Peach Blossom", blurb: "Juicy white peach wrapped in light florals—fresh, soft, and luminous, like sunshine through linen curtains." }
     ];
 
-    const list = document.getElementById("scentList");
+    /***********************
+     * STATE
+     ***********************/
+    let SCENTS = [];
+    // cart map: skuOrName -> { sku, name, price, qty }
+    const cart = new Map();
+
+    /***********************
+     * DOM
+     ***********************/
+    const listEl = document.getElementById("scentList");
     const cartItemsEl = document.getElementById("cartItems");
     const cartTotalEl = document.getElementById("cartTotal");
 
-    const cart = new Map(); // name -> qty
+    const openCartBtn = document.getElementById("openCartBtn");
+    const closeCartBtn = document.getElementById("closeCartBtn");
+    const cartOverlay = document.getElementById("cartOverlay");
+    const cartDrawer = document.getElementById("cartDrawer");
 
+    const cartListEl = document.getElementById("cartList");
+    const emptyMsgEl = document.getElementById("emptyMsg");
+    const drawerItemsEl = document.getElementById("drawerItems");
+    const drawerTotalEl = document.getElementById("drawerTotal");
+
+    const custNameEl = document.getElementById("custName");
+    const custEmailEl = document.getElementById("custEmail");
+    const custPhoneEl = document.getElementById("custPhone");
+    const custNotesEl = document.getElementById("custNotes");
+
+    const copyJsonBtn = document.getElementById("copyJsonBtn");
+    const placeOrderBtn = document.getElementById("placeOrderBtn");
+    const orderStatusEl = document.getElementById("orderStatus");
+
+    /***********************
+     * UTILS
+     ***********************/
     function money(n){ return `$${n.toFixed(2)}`; }
 
-    function updateCartSummary(){
+    function safeIdFromName(name){
+      return String(name || "")
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    }
+
+    function nowISO(){
+      // local time ISO with offset
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2,"0");
+      const tz = -d.getTimezoneOffset();
+      const sign = tz >= 0 ? "+" : "-";
+      const hh = pad(Math.floor(Math.abs(tz)/60));
+      const mm = pad(Math.abs(tz)%60);
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}${sign}${hh}:${mm}`;
+    }
+
+    function genOrderId(){
+      // Simple, readable, good enough for email orders
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2,"0");
+      const stamp = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+      const rand = Math.random().toString(16).slice(2,6).toUpperCase();
+      return `CS-${stamp}-${rand}`;
+    }
+
+    function setStatus(msg, kind=""){
+      orderStatusEl.classList.remove("ok","err");
+      if (kind) orderStatusEl.classList.add(kind);
+      orderStatusEl.textContent = msg;
+    }
+
+    /***********************
+     * CART PERSISTENCE
+     ***********************/
+    function saveCart(){
+      const arr = Array.from(cart.values());
+      localStorage.setItem(CART_KEY, JSON.stringify(arr));
+    }
+
+    function loadCart(){
+      cart.clear();
+      try{
+        const raw = localStorage.getItem(CART_KEY);
+        if(!raw) return;
+        const arr = JSON.parse(raw);
+        if(!Array.isArray(arr)) return;
+        arr.forEach(item => {
+          if(!item) return;
+          const key = item.sku || item.name;
+          if(!key) return;
+          cart.set(key, {
+            sku: item.sku || safeIdFromName(item.name),
+            name: item.name || "Item",
+            price: Number(item.price ?? PRICE),
+            qty: Math.max(0, Number(item.qty ?? 0))
+          });
+        });
+      }catch(e){
+        // ignore
+      }
+    }
+
+    /***********************
+     * CART OPERATIONS
+     ***********************/
+    function getTotals(){
       let items = 0;
-      for (const v of cart.values()) items += v;
+      let subtotal = 0;
+      for(const it of cart.values()){
+        items += it.qty;
+        subtotal += it.qty * it.price;
+      }
+      return { items, subtotal };
+    }
+
+    function updateCartSummary(){
+      const { items, subtotal } = getTotals();
       cartItemsEl.textContent = items;
-
-      const total = items * PRICE;
-      cartTotalEl.textContent = money(total);
+      cartTotalEl.textContent = money(subtotal);
+      drawerItemsEl.textContent = items;
+      drawerTotalEl.textContent = money(subtotal);
     }
 
-    function setQty(name, qty){
-      const next = Math.max(0, qty);
-      cart.set(name, next);
+    function setQty(key, qty){
+      const it = cart.get(key);
+      if(!it) return;
+      it.qty = Math.max(0, qty);
+      if(it.qty === 0) cart.delete(key);
+      saveCart();
       updateCartSummary();
+      renderCartDrawer();
     }
 
-    function render(){
-      list.innerHTML = "";
+    function addToCart(scent){
+      const key = scent.sku || scent.name;
+      const existing = cart.get(key);
+      if(existing){
+        existing.qty += 1;
+      }else{
+        cart.set(key, {
+          sku: scent.sku || safeIdFromName(scent.name),
+          name: scent.name,
+          price: Number(scent.price ?? PRICE),
+          qty: 1
+        });
+      }
+      saveCart();
+      updateCartSummary();
+      renderCartDrawer();
+    }
+
+    /***********************
+     * SCENTS LOADING
+     ***********************/
+    function normalizeScent(obj){
+      // Accepts multiple JSON shapes; we normalize to:
+      // { sku, name, blurb, price }
+      // If your JSON is different, send it next and I’ll map it perfectly.
+      const name = obj.name || obj.scent || obj.title || "";
+      const blurb = obj.blurb || obj.description || obj.desc || "";
+      const sku = obj.sku || obj.id || (name ? safeIdFromName(name) : "");
+      const price = (obj.price != null) ? Number(obj.price) : PRICE;
+      return { sku, name, blurb, price };
+    }
+
+    async function loadScents(){
+      try{
+        const res = await fetch("./scents.json", { cache: "no-store" });
+        if(!res.ok) throw new Error("no scents.json");
+        const data = await res.json();
+
+        // allow either array, or {scents:[...]}
+        const arr = Array.isArray(data) ? data : (Array.isArray(data.scents) ? data.scents : null);
+        if(!arr) throw new Error("invalid scents.json");
+
+        SCENTS = arr.map(normalizeScent).filter(s => s.name);
+      }catch(err){
+        SCENTS = FALLBACK_SCENTS.map(normalizeScent);
+      }
+    }
+
+    /***********************
+     * RENDER MENU
+     ***********************/
+    function renderMenu(){
+      listEl.innerHTML = "";
       SCENTS.forEach((s) => {
-        const qty = cart.get(s.name) ?? 0;
+        const key = s.sku || s.name;
+        const qty = cart.get(key)?.qty ?? 0;
 
         const card = document.createElement("div");
         card.className = "card";
@@ -662,12 +1067,12 @@
         left.style.minWidth = "0";
         left.innerHTML = `
           <h3 title="${s.name}">${s.name}</h3>
-          <p>${s.blurb}</p>
+          <p>${s.blurb || ""}</p>
         `;
 
         const right = document.createElement("div");
         right.innerHTML = `
-          <div class="price">${money(PRICE)}</div>
+          <div class="price">${money(s.price ?? PRICE)}</div>
           <div class="controls">
             <div class="qty" role="group" aria-label="Quantity for ${s.name}">
               <button type="button" data-action="dec" aria-label="Decrease ${s.name}">−</button>
@@ -684,30 +1089,263 @@
         const addBtn = right.querySelector('button[data-action="add"]');
 
         function syncQty(){
-          qtySpan.textContent = cart.get(s.name) ?? 0;
+          qtySpan.textContent = cart.get(key)?.qty ?? 0;
         }
 
-        decBtn.addEventListener("click", () => { setQty(s.name, (cart.get(s.name) ?? 0) - 1); syncQty(); });
-        incBtn.addEventListener("click", () => { setQty(s.name, (cart.get(s.name) ?? 0) + 1); syncQty(); });
-        addBtn.addEventListener("click", () => { setQty(s.name, (cart.get(s.name) ?? 0) + 1); syncQty(); });
+        decBtn.addEventListener("click", () => {
+          const current = cart.get(key)?.qty ?? 0;
+          if(current <= 0) return;
+          // We keep item present until 0, then remove
+          if(!cart.has(key)){
+            cart.set(key, { sku: s.sku, name: s.name, price: s.price ?? PRICE, qty: 0 });
+          }
+          setQty(key, current - 1);
+          syncQty();
+        });
+
+        incBtn.addEventListener("click", () => {
+          if(!cart.has(key)){
+            cart.set(key, { sku: s.sku, name: s.name, price: s.price ?? PRICE, qty: 0 });
+          }
+          const current = cart.get(key)?.qty ?? 0;
+          setQty(key, current + 1);
+          syncQty();
+        });
+
+        addBtn.addEventListener("click", () => {
+          addToCart(s);
+          syncQty();
+          // optional: open cart to confirm add
+          openCart();
+        });
 
         card.appendChild(left);
         card.appendChild(right);
-        list.appendChild(card);
+        listEl.appendChild(card);
       });
 
       updateCartSummary();
     }
 
-    render();
+    /***********************
+     * RENDER CART DRAWER
+     ***********************/
+    function renderCartDrawer(){
+      const items = Array.from(cart.values()).filter(it => it.qty > 0);
 
-    // Mobile nav toggle
-    document.getElementById("navToggle").addEventListener("click", () => {
-      document.body.classList.toggle("nav-open");
+      cartListEl.innerHTML = "";
+      emptyMsgEl.style.display = items.length ? "none" : "block";
+
+      items.forEach(it => {
+        const row = document.createElement("div");
+        row.className = "cart-item";
+        row.innerHTML = `
+          <div style="min-width:0;">
+            <strong title="${it.name}">${it.name}</strong>
+            <small>${it.sku ? `SKU: ${it.sku}` : ""}</small>
+            <div class="qty" style="margin-top:10px;" role="group" aria-label="Quantity for ${it.name}">
+              <button type="button" data-act="dec" aria-label="Decrease ${it.name}">−</button>
+              <span data-role="q">${it.qty}</span>
+              <button type="button" data-act="inc" aria-label="Increase ${it.name}">+</button>
+            </div>
+          </div>
+          <div>
+            <div class="line">${money(it.qty * it.price)}</div>
+          </div>
+        `;
+
+        const qSpan = row.querySelector('[data-role="q"]');
+        row.querySelector('[data-act="dec"]').addEventListener("click", () => {
+          setQty(it.sku || it.name, it.qty - 1);
+          qSpan.textContent = cart.get(it.sku || it.name)?.qty ?? 0;
+        });
+        row.querySelector('[data-act="inc"]').addEventListener("click", () => {
+          setQty(it.sku || it.name, it.qty + 1);
+          qSpan.textContent = cart.get(it.sku || it.name)?.qty ?? (it.qty + 1);
+        });
+
+        cartListEl.appendChild(row);
+      });
+
+      updateCartSummary();
+    }
+
+    /***********************
+     * ORDER JSON
+     ***********************/
+    function buildOrder(){
+      const { items, subtotal } = getTotals();
+      const order = {
+        order_id: genOrderId(),
+        timestamp: nowISO(),
+        brand: "Common Scents",
+        channel: "website",
+        customer: {
+          name: (custNameEl.value || "").trim(),
+          email: (custEmailEl.value || "").trim(),
+          phone: (custPhoneEl.value || "").trim()
+        },
+        notes: (custNotesEl.value || "").trim(),
+        currency: "USD",
+        items: Array.from(cart.values())
+          .filter(it => it.qty > 0)
+          .map(it => ({
+            sku: it.sku || safeIdFromName(it.name),
+            name: it.name,
+            qty: it.qty,
+            price: Number(it.price),
+            line_total: Number((it.qty * it.price).toFixed(2))
+          })),
+        subtotal: Number(subtotal.toFixed(2)),
+        tax: 0.00,
+        shipping: 0.00,
+        total: Number(subtotal.toFixed(2))
+      };
+
+      return { order, itemsCount: items };
+    }
+
+    async function copyOrderJson(){
+      const { order } = buildOrder();
+      const txt = JSON.stringify(order, null, 2);
+      try{
+        await navigator.clipboard.writeText(txt);
+        setStatus("Order JSON copied to clipboard.", "ok");
+      }catch(e){
+        setStatus("Couldn’t copy automatically. Your browser may block clipboard.", "err");
+      }
+    }
+
+    /***********************
+     * EMAIL SEND (EmailJS or fallback)
+     ***********************/
+    async function sendOrder(){
+      const { order, itemsCount } = buildOrder();
+
+      if(itemsCount <= 0){
+        setStatus("Cart is empty. Add a few scents first.", "err");
+        return;
+      }
+      if(!order.customer.name){
+        setStatus("Please enter your name.", "err");
+        return;
+      }
+      if(!order.customer.email){
+        setStatus("Please enter your email.", "err");
+        return;
+      }
+
+      const prettyList = order.items
+        .map(i => `${i.qty} x ${i.name} (${i.sku}) = $${i.line_total.toFixed(2)}`)
+        .join("\n");
+
+      // If EmailJS configured:
+      if(EMAILJS.enabled && window.emailjs){
+        try{
+          emailjs.init({ publicKey: EMAILJS.publicKey });
+
+          const params = {
+            to_email: EMAILJS.toEmail,
+            from_name: order.customer.name,
+            from_email: order.customer.email,
+            phone: order.customer.phone || "",
+            notes: order.notes || "",
+            order_id: order.order_id,
+            timestamp: order.timestamp,
+            items: prettyList,
+            subtotal: `$${order.subtotal.toFixed(2)}`,
+            order_json: JSON.stringify(order, null, 2)
+          };
+
+          await emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, params);
+          setStatus("Order sent! Check your email confirmation.", "ok");
+
+          // Clear cart after successful send
+          cart.clear();
+          saveCart();
+          updateCartSummary();
+          renderCartDrawer();
+          renderMenu();
+          return;
+
+        }catch(err){
+          setStatus("Email send failed (EmailJS). Using fallback email method…", "err");
+          // continue to fallback below
+        }
+      }
+
+      // Fallback: copy JSON + mailto
+      const jsonTxt = JSON.stringify(order, null, 2);
+      try{ await navigator.clipboard.writeText(jsonTxt); }catch(e){}
+
+      const subject = encodeURIComponent(`Common Scents Order ${order.order_id}`);
+      const body = encodeURIComponent(
+        `NEW ORDER\n\n` +
+        `Order ID: ${order.order_id}\n` +
+        `Time: ${order.timestamp}\n\n` +
+        `Customer: ${order.customer.name}\n` +
+        `Email: ${order.customer.email}\n` +
+        `Phone: ${order.customer.phone || ""}\n\n` +
+        `Items:\n${prettyList}\n\n` +
+        `Subtotal: $${order.subtotal.toFixed(2)}\n\n` +
+        `Notes:\n${order.notes || ""}\n\n` +
+        `JSON (also copied to clipboard if allowed):\n\n${jsonTxt}`
+      );
+
+      // Sends to YOUR address in EMAILJS.toEmail, or fallback to a hardcoded safe default
+      const to = encodeURIComponent(EMAILJS.toEmail || "commonscentsuse@gmail.com");
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+
+      setStatus("Fallback email opened. JSON copied to clipboard (if allowed).", "ok");
+    }
+
+    /***********************
+     * CART DRAWER OPEN/CLOSE
+     ***********************/
+    function openCart(){
+      document.body.classList.add("cart-open");
+      cartOverlay.setAttribute("aria-hidden","false");
+      cartDrawer.setAttribute("aria-hidden","false");
+    }
+    function closeCart(){
+      document.body.classList.remove("cart-open");
+      cartOverlay.setAttribute("aria-hidden","true");
+      cartDrawer.setAttribute("aria-hidden","true");
+    }
+
+    openCartBtn.addEventListener("click", () => {
+      renderCartDrawer();
+      openCart();
     });
-    document.querySelectorAll(".drawer a").forEach(a => {
-      a.addEventListener("click", () => document.body.classList.remove("nav-open"));
+    closeCartBtn.addEventListener("click", closeCart);
+    cartOverlay.addEventListener("click", closeCart);
+
+    // ESC to close
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeCart();
     });
+
+    copyJsonBtn.addEventListener("click", copyOrderJson);
+    placeOrderBtn.addEventListener("click", sendOrder);
+
+    /***********************
+     * INIT
+     ***********************/
+    (async function init(){
+      // mobile nav toggle
+      document.getElementById("navToggle").addEventListener("click", () => {
+        document.body.classList.toggle("nav-open");
+      });
+      document.querySelectorAll(".drawer a").forEach(a => {
+        a.addEventListener("click", () => document.body.classList.remove("nav-open"));
+      });
+
+      loadCart();
+      await loadScents();
+      renderMenu();
+      renderCartDrawer();
+      setStatus("Orders send by email (no payment yet).");
+    })();
   </script>
 </body>
 </html>
